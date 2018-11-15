@@ -2,11 +2,15 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 import requests
+from solo.models import SingletonModel
 
 
 class Service(models.Model):
     label = models.CharField(_("label"), max_length=100)
     api_root = models.CharField(_("api root url"), max_length=255)
+
+    own_client_id = models.CharField(max_length=255, blank=True)
+    own_secret = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.label
@@ -32,3 +36,13 @@ class Service(models.Model):
             'secret': secret
         })
         assert response.status_code == 201, "Create went wrong"
+
+
+class Configuration(SingletonModel):
+    ztcs = models.ManyToManyField('Service', blank=True)
+
+    class Meta:
+        verbose_name = _("Service configuration")
+
+    def __str__(self):
+        return _("Service configuration")

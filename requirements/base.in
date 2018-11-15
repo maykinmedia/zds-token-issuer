@@ -9,5 +9,6 @@ Django
 django-axes
 django-choices
 django-sniplates
+django-solo
 
 # djangorestframework

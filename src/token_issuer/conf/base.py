@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # External applications.
     'axes',
     'sniplates',
+    'solo',
 
     # Project applications.
     'token_issuer.accounts',
@@ -283,20 +284,3 @@ AXES_COOLOFF_TIME = 1  # One hour
 AXES_BEHIND_REVERSE_PROXY = True  # Default: False (we are typically using Nginx as reverse proxy)
 AXES_ONLY_USER_FAILURES = False  # Default: False (you might want to block on username rather than IP)
 AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = False  # Default: False (you might want to block on username and IP)
-
-
-# Custom, known services
-ZRC_JWT_CLIENT_ID = 'token-issuer'
-ZRC_JWT_SECRET = os.getenv('ZRC_JWT_SECRET', '')
-
-DRC_JWT_CLIENT_ID = 'token-issuer'
-DRC_JWT_SECRET = os.getenv('DRC_JWT_SECRET', '')
-
-ZTC_JWT_CLIENT_ID = 'token-issuer'
-ZTC_JWT_SECRET = os.getenv('ZTC_JWT_SECRET', '')
-
-BRC_JWT_CLIENT_ID = 'token-issuer'
-BRC_JWT_SECRET = os.getenv('BRC_JWT_SECRET', '')
-
-ORC_JWT_CLIENT_ID = 'token-issuer'
-ORC_JWT_SECRET = os.getenv('ORC_JWT_SECRET', '')
