@@ -1,0 +1,10 @@
+psycopg2
+pytz
+raven
+
+Django
+django-axes
+django-choices
+django-sniplates
+
+# djangorestframework
