@@ -7,10 +7,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from .services.views import CreateCredentialsView
 
-handler500 = 'token_supplier.utils.views.server_error'
-admin.site.site_header = 'token_supplier admin'
-admin.site.site_title = 'token_supplier admin'
-admin.site.index_title = 'Welcome to the token_supplier admin'
+handler500 = 'token_issuer.utils.views.server_error'
+admin.site.site_header = 'token_issuer admin'
+admin.site.site_title = 'token_issuer admin'
+admin.site.index_title = 'Welcome to the token_issuer admin'
 
 urlpatterns = [
     # url(r'^admin_tools/', include('admin_tools.urls')),

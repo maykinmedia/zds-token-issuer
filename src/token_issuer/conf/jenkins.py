@@ -14,7 +14,7 @@ ADMINS = ()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'token_supplier',
+        'NAME': 'token_issuer',
         # The database account jenkins/jenkins is always present for testing.
         'USER': 'jenkins',
         'PASSWORD': 'jenkins',
@@ -31,7 +31,7 @@ DATABASES = {
         # PostgreSQL 9.6: 5436
         'PORT': '',
         'TEST': {
-            'NAME': 'test_token_supplier_{}_{}'.format(
+            'NAME': 'test_token_issuer_{}_{}'.format(
                 os.getenv('JOB_NAME', default='').lower().rsplit('/', 1)[-1],
                 os.getenv('BUILD_NUMBER', default='0'),
             )
@@ -82,7 +82,7 @@ AXES_CACHE = 'axes_cache'
 INSTALLED_APPS += [
     'django_jenkins',
 ]
-PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith('token_supplier.')]
+PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith('token_issuer.')]
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pylint',
     'django_jenkins.tasks.run_pep8',

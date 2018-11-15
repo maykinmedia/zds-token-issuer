@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'sniplates',
 
     # Project applications.
-    'token_supplier.accounts',
-    'token_supplier.services',
-    'token_supplier.utils',
+    'token_issuer.accounts',
+    'token_issuer.services',
+    'token_issuer.utils',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'token_supplier.urls'
+ROOT_URLCONF = 'token_issuer.urls'
 
 # List of callables that know how to import templates from various sources.
 RAW_TEMPLATE_LOADERS = (
@@ -84,14 +84,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'token_supplier.utils.context_processors.settings',
+                'token_issuer.utils.context_processors.settings',
             ],
             'loaders': RAW_TEMPLATE_LOADERS
         },
     },
 ]
 
-WSGI_APPLICATION = 'token_supplier.wsgi.application'
+WSGI_APPLICATION = 'token_issuer.wsgi.application'
 
 # Database: Defined in target specific settings files.
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -163,7 +163,7 @@ FIXTURE_DIRS = (
     os.path.join(DJANGO_PROJECT_DIR, 'fixtures'),
 )
 
-DEFAULT_FROM_EMAIL = 'token_supplier@example.com'
+DEFAULT_FROM_EMAIL = 'token_issuer@example.com'
 EMAIL_TIMEOUT = 10
 
 LOGGING_DIR = os.path.join(BASE_DIR, 'log')
@@ -216,7 +216,7 @@ LOGGING = {
         'project': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGGING_DIR, 'token_supplier.log'),
+            'filename': os.path.join(LOGGING_DIR, 'token_issuer.log'),
             'formatter': 'verbose',
             'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'backupCount': 10
@@ -231,7 +231,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'token_supplier': {
+        'token_issuer': {
             'handlers': ['project'],
             'level': 'INFO',
             'propagate': True,
@@ -258,14 +258,14 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Allow logging in with both username+password and email+password
 AUTHENTICATION_BACKENDS = [
-    'token_supplier.accounts.backends.UserModelEmailBackend',
+    'token_issuer.accounts.backends.UserModelEmailBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
 
 #
 # Custom settings
 #
-PROJECT_NAME = 'token_supplier'
+PROJECT_NAME = 'token_issuer'
 ENVIRONMENT = None
 SHOW_ALERT = True
 

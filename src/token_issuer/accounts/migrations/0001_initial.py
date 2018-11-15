@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.utils.timezone
-import token_supplier.accounts.managers
+import token_issuer.accounts.managers
 
 
 class Migration(migrations.Migration):
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'users',
             },
             managers=[
-                ('objects', token_supplier.accounts.managers.UserManager()),
+                ('objects', token_issuer.accounts.managers.UserManager()),
             ],
         ),
     ]

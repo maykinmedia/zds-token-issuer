@@ -15,9 +15,9 @@ ADMINS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'token_supplier-staging',
-        'USER': 'token_supplier',
-        'PASSWORD': 'token_supplier',
+        'NAME': 'token_issuer-test',
+        'USER': 'token_issuer',
+        'PASSWORD': 'token_issuer',
         'HOST': '',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',  # Set to empty string for default.
     }
@@ -74,7 +74,7 @@ LOGGING['loggers'].update({
 #
 
 # Show active environment in admin.
-ENVIRONMENT = 'staging'
+ENVIRONMENT = 'test'
 
 # We will assume we're running under https
 SESSION_COOKIE_SECURE = True
@@ -96,8 +96,7 @@ INSTALLED_APPS = INSTALLED_APPS + [
     'raven.contrib.django.raven_compat',
 ]
 RAVEN_CONFIG = {
-    'dsn': 'https://', # https://username:password@sentry-domain/project-nr
-    'public_dsn': '', # https://username@sentry-domain/project-nr
+    'dsn': 'https://',
     'release': raven.fetch_git_sha(BASE_DIR),
 }
 LOGGING['handlers'].update({

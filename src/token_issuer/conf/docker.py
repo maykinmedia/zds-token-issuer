@@ -47,7 +47,7 @@ DATABASES = {
 #     'default': {
 #         'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
 #         'URL': getenv('ELASTICSEARCH_URL', 'http://elasticsearch:9200/'),
-#         'INDEX_NAME': 'token_supplier',
+#         'INDEX_NAME': 'token_issuer',
 #     },
 # }
 #
