@@ -14,3 +14,13 @@ class CreateCredentialsForm(forms.Form):
         client_id = f"{label}-{random_client_id}"
         secret = get_random_string(length=32)
         return client_id, secret
+
+
+class GenerateJWTForm(forms.Form):
+    client_id = forms.CharField(label=_("Client ID"))
+    secret = forms.CharField(label=_("Secret"))
+
+    zaaktypes = forms.MultipleChoiceField(
+        label=_("Zaaktypes"), required=False,
+        widget=forms.CheckboxSelectMultiple
+    )

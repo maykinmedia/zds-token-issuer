@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
-from .forms import CreateCredentialsForm
+from .forms import CreateCredentialsForm, GenerateJWTForm
 from .models import Service
 
 
@@ -31,3 +31,16 @@ class CreateCredentialsView(SuccessMessageMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['services'] = self.get_services()
         return context
+
+
+class GenerateJWTView(FormView):
+    template_name = 'services/generate_jwt.html'
+    form_class = GenerateJWTForm
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial.update(
+            client_id=self.request.session['client_id'],
+            secret=self.request.session['secret'],
+        )
+        return initial

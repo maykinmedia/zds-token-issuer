@@ -1,0 +1,18 @@
+{% extends "master.html" %}
+{% load i18n sniplates %}
+
+
+{% block content %}
+{% load_widgets form='forms.html' %}
+
+<h1>{% trans "Generate a ZDS JWT" %}</h1>
+
+<form action="." method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    {% widget 'form:submit-btn' %}
+
+</form>
+{% endblock content %}

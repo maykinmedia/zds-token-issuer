@@ -13,6 +13,8 @@
             {% trans "Client ID:" %} <code>{{ request.session.client_id }}</code>
             <br>
             {% trans "Secret:" %} <code>{{ request.session.secret }}</code>
+            <br>
+            <a href="{% url 'generate-jwt' %}">{% trans "Generate a JWT" %}</a>
         </section>
     {% else %}
         <p>{% blocktrans trimmed %}
