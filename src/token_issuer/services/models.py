@@ -45,4 +45,4 @@ class Configuration(SingletonModel):
         verbose_name = _("Service configuration")
 
     def __str__(self):
-        return _("Service configuration")
+        return "Service configuration"
