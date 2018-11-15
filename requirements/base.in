@@ -1,6 +1,7 @@
 psycopg2
 pytz
 raven
+pyjwt
 
 Django
 django-axes
