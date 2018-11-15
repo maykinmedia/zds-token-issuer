@@ -1,0 +1,13 @@
+{% extends "sniplates/django.html" %}
+{% load i18n sniplates %}
+
+
+{% block TextInput %}
+{% reuse '_label' %}
+{{ block.super }}
+{% endblock TextInput %}
+
+
+{% block submit-btn %}
+<button type="submit">{% trans "Submit" %}</button>
+{% endblock submit-btn %}

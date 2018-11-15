@@ -6,10 +6,10 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class CreateCredentialsForm(forms.Form):
-    label = forms.CharField(label=_("label"), help_text="Human-readable label")
+    client_label = forms.CharField(label=_("Client label"), help_text="Human-readable label")
 
     def save(self, *args, **kwargs) -> Tuple[str, str]:
-        label = self.cleaned_data['label']
+        label = self.cleaned_data['client_label']
         random_client_id = get_random_string(length=12)
         client_id = f"{label}-{random_client_id}"
         secret = get_random_string(length=32)

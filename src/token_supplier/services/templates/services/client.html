@@ -1,0 +1,55 @@
+{% extends "master.html" %}
+{% load sniplates i18n %}
+
+
+{% block content %}
+<article>
+
+    <h1>{% trans "Register client" %}</h1>
+
+    {% if request.session.client_id %}
+        <section>
+            <h2>{% trans "Your credentials" %}</h2>
+            {% trans "Client ID:" %} <code>{{ request.session.client_id }}</code>
+            <br>
+            {% trans "Secret:" %} <code>{{ request.session.secret }}</code>
+        </section>
+    {% else %}
+        <p>{% blocktrans trimmed %}
+            Registering your client here will give you a client ID and secret,
+            and ensure you can use the same ID and secret in all services.
+        {% endblocktrans %}</p>
+    {% endif %}
+
+    <hr>
+
+    {% load_widgets form='forms.html' %}
+    <form action="." method="post">
+        {% csrf_token %}
+
+        <div>
+            {% form_field form.client_label %}
+        </div>
+
+        <hr>
+
+        {% widget 'form:submit-btn' %}
+
+    </form>
+
+</article>
+
+<aside>
+    <h1>{% trans "Services" %}</h1>
+    <ul>
+        {% for service in services %}
+            <li>
+                {{ service.label }}
+                (<a href="{{ service.api_root }}" target="_blank" rel="noopener">
+                    <code>{{ service.api_root }}</code>
+                </a>)
+            </li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endblock content %}
