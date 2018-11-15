@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.views.generic.base import TemplateView
+
+from .services.views import CreateCredentialsView
 
 handler500 = 'token_supplier.utils.views.server_error'
 admin.site.site_header = 'token_supplier admin'
@@ -21,7 +22,7 @@ urlpatterns = [
     url(r'^reset/done/$', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
     # Simply show the master template.
-    url(r'^$', TemplateView.as_view(template_name='demo.html')),
+    url(r'^$', CreateCredentialsView.as_view(), name='index'),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
