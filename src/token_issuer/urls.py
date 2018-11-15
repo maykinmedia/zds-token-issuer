@@ -23,7 +23,7 @@ urlpatterns = [
 
     # Simply show the master template.
     path('', CreateCredentialsView.as_view(), name='index'),
-    path('generate-jwt', GenerateJWTView.as_view(), name='generate-jwt'),
+    path('generate-jwt/', GenerateJWTView.as_view(), name='generate-jwt'),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
