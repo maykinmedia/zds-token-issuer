@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # Project applications.
     'token_supplier.accounts',
+    'token_supplier.services',
     'token_supplier.utils',
 ]
 
