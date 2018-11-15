@@ -1,6 +1,9 @@
+import os
 import warnings
 
-from .base import *
+os.environ.setdefault('SECRET_KEY', '%cgu9q!-d91jh+6+dpx#e2r14c57%ud0o0gm1uttup9rq0f8(4')
+
+from .base import *  # noqa isort:skip
 
 #
 # Standard Django settings.
