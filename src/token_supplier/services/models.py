@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class Service(models.Model):
     label = models.CharField(_("label"), max_length=100)
-    api_root = models.CharField(_("address"), max_length=255)
+    api_root = models.CharField(_("api root url"), max_length=255)
 
     def __str__(self):
         return self.label
