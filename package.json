@@ -1,26 +1,24 @@
 {
-  "name": "token_supplier",
+  "name": "token_issuer",
   "version": "1.0.0-alpha.0",
-  "description": "token_supplier project",
-  "main": "src/static/token_supplier/js/token_supplier.js",
+  "description": "issuer project",
+  "main": "src/static/token_issuer/js/token_issuer.js",
   "directories": {
     "doc": "doc"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/maykinmedia/token_supplier.git"
+    "url": "git+ssh://git@github.com/maykinmedia/zds-token-issuer.git"
   },
   "author": "Maykin Media",
   "license": "UNLICENSED",
   "homepage": "https://maykinmedia.nl",
   "dependencies": {
-    "bourbon-neat": "^1.8.0",
-    "font-awesome": "^4.6.3",
     "jshint-stylish": "^2.2.1",
-    "material-design-icons": "2.2.3",
     "normalize.css": "^4.0.0",
     "swagger2openapi": "^3.2.14"
   },
@@ -32,13 +30,13 @@
     "bourbon": "^4.2.6",
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-clean-css": "^3.8.0",
-    "gulp-css-purge": "^1.0.27",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-css-purge": "^3.0.5",
     "gulp-file": "^0.3.0",
     "gulp-jshint": "^2.0.1",
     "gulp-jshint-jslint-file-reporter": "^0.1.0",
-    "gulp-sass": "^3.1.0",
+    "gulp-sass": "^4.0.1",
     "istanbul-instrumenter-loader": "^1.0.0",
     "jasmine-core": "^2.5.2",
     "jshint": "^2.9.3",
@@ -53,7 +51,6 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "^1.8.0",
-    "node-sass": "^3.9.3",
     "postcss-loader": "^0.11.1",
     "require-dir": "^0.3.0",
     "sass-loader": "^4.0.2",

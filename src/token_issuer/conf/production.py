@@ -12,20 +12,6 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'token_issuer',
-        'USER': 'token_issuer',
-        'PASSWORD': 'token_issuer',
-        'HOST': '',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',  # Set to empty string for default.
-    }
-}
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '%cgu9q!-d91jh+6+dpx#e2r14c57%ud0o0gm1uttup9rq0f8(4'
-
 ALLOWED_HOSTS = []
 
 # Redis cache backend

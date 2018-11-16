@@ -15,6 +15,17 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'token_issuer'),
+        'USER': os.getenv('DB_USER', 'token_issuer'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'token_issuer'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', 5432),
+    }
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -284,3 +295,23 @@ AXES_COOLOFF_TIME = 1  # One hour
 AXES_BEHIND_REVERSE_PROXY = True  # Default: False (we are typically using Nginx as reverse proxy)
 AXES_ONLY_USER_FAILURES = False  # Default: False (you might want to block on username rather than IP)
 AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = False  # Default: False (you might want to block on username and IP)
+
+# Raven
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+
+if SENTRY_DSN:
+    INSTALLED_APPS = INSTALLED_APPS + [
+        'raven.contrib.django.raven_compat',
+    ]
+
+    RAVEN_CONFIG = {
+        'dsn': SENTRY_DSN,
+        # 'release': raven.fetch_git_sha(BASE_DIR), doesn't work in Docker
+    }
+    LOGGING['handlers'].update({
+        'sentry': {
+            'level': 'WARNING',
+            'class': 'raven.handlers.logging.SentryHandler',
+            'dsn': RAVEN_CONFIG['dsn']
+        },
+    })
