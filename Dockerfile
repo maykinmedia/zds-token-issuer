@@ -99,7 +99,7 @@ ENV DJANGO_SETTINGS_MODULE=token_issuer.conf.docker
 ARG SECRET_KEY=dummy
 
 # Run collectstatic, so the result is already included in the image
-RUN python src/manage.py collectstatic --link --noinput
+RUN python src/manage.py collectstatic --noinput
 
 EXPOSE 8000
 CMD ["/start.sh"]
