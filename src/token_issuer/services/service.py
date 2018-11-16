@@ -1,4 +1,4 @@
-from copy import copy
+from typing import List, Dict, Any
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -7,9 +7,8 @@ from zds_client import Client, ClientAuth
 
 from .models import Configuration
 
-# FIXME - this is NOT thread safe
 
-def get_zaaktypen() -> list:
+def get_zaaktypes() -> List[Dict[str, Any]]:
     config = Configuration.get_solo()
 
     results = []

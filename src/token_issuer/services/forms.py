@@ -4,7 +4,7 @@ from django import forms
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from .service import get_zaaktypen
+from .service import get_zaaktypes
 
 
 class CreateCredentialsForm(forms.Form):
@@ -22,7 +22,10 @@ class GenerateJWTForm(forms.Form):
     client_id = forms.CharField(label=_("Client ID"))
     secret = forms.CharField(label=_("Secret"))
 
-    # TODO: add list of scopes from APIs
+    scopes = forms.MultipleChoiceField(
+        label=_("Scopes"), required=False,
+        widget=forms.CheckboxSelectMultiple
+    )
 
     zaaktypes = forms.MultipleChoiceField(
         label=_("Zaaktypes"), required=False,
@@ -32,10 +35,10 @@ class GenerateJWTForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.zaaktypen = get_zaaktypen()
+        self.zaaktypes = get_zaaktypes()
 
         choices = []
-        for item in self.zaaktypen:
+        for item in self.zaaktypes:
             service_label = item['service'].label
             service_address = item['service'].api_root
             optgroup = f"{service_label} ({service_address})"
