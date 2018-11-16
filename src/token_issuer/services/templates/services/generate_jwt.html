@@ -7,6 +7,16 @@
 
 <h1>{% trans "Generate a ZDS JWT" %}</h1>
 
+<div>
+    <p>{% trans "HTTP headers to include with the request" %}</p>
+
+    <p style="overflow: scroll;">
+        {% for header, value in request.session.credentials.items %}
+            <code>{{ header }}</code>: <code>{{ value }}</code>
+        {% endfor %}
+    </p>
+</div>
+
 <form action="." method="post">
     {% csrf_token %}
 
