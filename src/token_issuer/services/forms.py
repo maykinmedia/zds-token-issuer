@@ -4,7 +4,7 @@ from django import forms
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from .service import get_zaaktypes
+from .service import get_scopes, get_zaaktypes
 
 
 class CreateCredentialsForm(forms.Form):
@@ -35,9 +35,10 @@ class GenerateJWTForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # fetch the available zaaktypes
         self.zaaktypes = get_zaaktypes()
 
-        choices = []
+        zt_choices = []
         for item in self.zaaktypes:
             service_label = item['service'].label
             service_address = item['service'].api_root
@@ -47,6 +48,11 @@ class GenerateJWTForm(forms.Form):
                 (zt['url'], f"{zt['omschrijving']}({zt['identificatie']})")
                 for zt in item['zaaktypes']
             ]
-            choices.append((optgroup, values))
+            zt_choices.append((optgroup, values))
 
-        self.fields['zaaktypes'].choices = choices
+        self.fields['zaaktypes'].choices = zt_choices
+
+        # dynamically retrieve the scopes
+        self.fields['scopes'].choices = [
+            (scope, scope) for scope in sorted(get_scopes())
+        ]
