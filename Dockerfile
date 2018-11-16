@@ -70,9 +70,11 @@ RUN apk --no-cache add \
     # pillow dependencies
     jpeg \
     openjpeg \
-    zlib
-
-# TODO: add nodejs for swagger2openapi conversion
+    zlib \
+    # some nodejs tooling needed
+    git \
+    nodejs \
+    nodejs-npm
 
 WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
@@ -82,9 +84,12 @@ RUN mkdir /app/log
 COPY --from=backend-build /usr/local/lib/python3.7 /usr/local/lib/python3.7
 COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 
+# set up production nodejs things
+COPY ./*.json /app/
+RUN npm install --production
+
 # copy build statics
 COPY --from=frontend-build /app/src/token_issuer/static /app/src/token_issuer/static
-
 
 # copy source code
 COPY ./src /app/src
