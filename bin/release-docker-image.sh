@@ -12,7 +12,6 @@ git_branch=$(git rev-parse --abbrev-ref HEAD)
 build_image() {
     tag=$1
     docker build \
-        --target production \
         -t ${CONTAINER_REPO}:$tag \
         -f Dockerfile .
 }

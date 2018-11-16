@@ -9,13 +9,14 @@ services:
   web:
     build: .
     environment:
-      - DJANGO_SETTINGS_MODULE=token_supplier.conf.docker
+      - DJANGO_SETTINGS_MODULE=token_issuer.conf.docker
+      - SECRET_KEY=${SECRET_KEY:-#*8=vm+v=4w_z4pev+v8v$^v96#g1oo^siqg!i#s*9qb#e2b_n}
     ports:
       - 8000:8000
     depends_on:
       - db
 
-  # See: src/token_supplier/conf/docker.py
+  # See: src/token_issuer/conf/docker.py
   # Optional containers below:
 #  elasticsearch:
 #    # NOTE: No persistance storage configured.
