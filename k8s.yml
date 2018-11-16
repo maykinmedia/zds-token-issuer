@@ -1,0 +1,111 @@
+---
+
+# database Deployment
+
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: postgres-zds-token-issuer
+  namespace: gemma
+  labels:
+    k8s-app: postgres-zds-token-issuer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: postgres-zds-token-issuer
+  template:
+    metadata:
+      name: postgres-zds-token-issuer
+      labels:
+        k8s-app: postgres-zds-token-issuer
+    spec:
+      volumes:
+      - name: data
+        hostPath:
+          path: "/storage/gemma-postgres-zds-token-issuer"
+          type: ''
+      containers:
+      - name: postgres
+        image: mdillon/postgis
+        env:
+          - name: POSTGRES_PASSWORD
+            value: <REDACTED>
+        volumeMounts:
+          - name: data
+            mountPath: "/var/lib/postgresql/data"
+
+---
+
+# Database  database Service
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres-zds-token-issuer
+  namespace: gemma
+  labels:
+    k8s-app: postgres-zds-token-issuer
+spec:
+  selector:
+    k8s-app: postgres-zds-token-issuer
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+
+---
+
+# Web app Deployment
+
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: zds-token-issuer
+  namespace: gemma
+  labels:
+    k8s-app: zds-token-issuer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: zds-token-issuer
+  template:
+    metadata:
+      name: zds-token-issuer
+      labels:
+        k8s-app: zds-token-issuer
+    spec:
+      containers:
+      - name: zds-token-issuer
+        image: maykinmedia/zds-token-issuer:0.1
+        env:
+          - name: SUBPATH
+            value: /tokens
+          - name: DATABASE_HOST
+            value: postgres-zds-token-issuer
+          - name: SECRET_KEY
+            value: <REDACTED>
+          - name: DATABASE_PASSWORD
+            value: <REDACTED>
+          - name: SENTRY_DSN
+            value: <REDACTED>
+
+---
+
+# Web app Service
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: zds-token-issuer
+  namespace: gemma
+  labels:
+    k8s-app: zds-token-issuer
+spec:
+  selector:
+    k8s-app: zds-token-issuer
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
