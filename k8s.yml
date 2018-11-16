@@ -27,7 +27,7 @@ spec:
           type: ''
       containers:
       - name: postgres
-        image: mdillon/postgis
+        image: postgres:10
         env:
           - name: POSTGRES_PASSWORD
             value: <REDACTED>
@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: zds-token-issuer
-        image: maykinmedia/zds-token-issuer:0.1
+        image: maykinmedia/zds-token-issuer:latest
         env:
           - name: SUBPATH
             value: /tokens
