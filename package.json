@@ -27,7 +27,6 @@
     "babel-loader": "^6.2.5",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
-    "bourbon": "^4.2.6",
     "font-awesome": "^4.7.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",
