@@ -43,8 +43,8 @@ class GenerateJWTView(FormView):
     def get_initial(self):
         initial = super().get_initial()
         initial.update(
-            client_id=self.request.session['client_id'],
-            secret=self.request.session['secret'],
+            client_id=self.request.session.get('client_id', ''),
+            secret=self.request.session.get('secret', ''),
         )
         if 'claims' in self.request.session:
             initial.update(self.request.session['claims'])

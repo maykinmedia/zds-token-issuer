@@ -1,0 +1,49 @@
+@import '../../lib/responsive';
+@import '../../lib/typography';
+@import 'constants';
+
+.form {
+  .list,
+  .definition-list,
+  &__control {
+    margin: $typography-margin-2 0;
+  }
+
+  &__control {
+    display: flex;
+    @include responsive(flex-wrap, wrap, nowrap, nowrap, nowrap);
+    @include responsive(justify-content, stretch, space-between, space-between, space-between);
+  }
+
+  &__label,
+  &__input {
+    @include body;
+    width: 100%;
+    height: $form-margin-4;
+    line-height: $form-margin-4;
+  }
+
+  &__label {
+    color: $form-color-label
+  }
+
+  &__input,
+  .button {
+    appearance: none;
+    border: none;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    background-color: $form-color-input-background;
+    padding: 0.2rem 0.5rem;
+  }
+
+  &__title {
+    @include h2;
+  }
+
+  &__subtitle {
+    @include h3;
+  }
+}

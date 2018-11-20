@@ -1,0 +1,27 @@
+@import '../../lib/color';
+@import '../../lib/grid';
+@import '../../lib/typography';
+
+$article-color-background: $color-white;
+$article-padding-body-mobile: $grid-margin-2;
+$article-padding-body-laptop: $grid-margin-4;
+
+$article-padding-sidebar-h-mobile: $grid-margin-2;
+$article-padding-sidebar-h-tablet: $grid-margin-3 / 2;
+$article-padding-sidebar-v-mobile: $grid-margin-4;
+$article-padding-sidebar-v-tablet: $grid-margin-2;
+
+.article {
+  @include columns-responsive(12, 8, 8, 8);
+  @include responsive(padding, $article-padding-body-mobile, $article-padding-body-mobile, $article-padding-body-laptop, $article-padding-body-laptop);
+  background-color: $article-color-background;
+  position: relative;
+
+  &:last-child {
+    @include responsive(width, 100%, 100%, 100%, 100%);
+  }
+
+  &__section {
+    @include wysiwyg;
+  }
+}

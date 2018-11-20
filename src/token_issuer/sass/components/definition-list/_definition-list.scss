@@ -1,0 +1,39 @@
+@import '../../lib/color';
+@import '../../lib/typography';
+
+$definition-list-color-term: $color-gray-darker;
+$definition-list-color-border: $color-gray;
+
+
+.definition-list {
+  font-size: 0;
+
+  &__term,
+  &__definition {
+    @include body;
+    @include responsive(width, 100%, 50%, 50%, 50%);
+    border-bottom: 1px solid $definition-list-color-border;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 10px 0;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &__term {
+    @include ellipsis;
+    color: $definition-list-color-term;
+  }
+
+  &__definition {
+    @include mono;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  + .form {
+    border-top: 1px solid $definition-list-color-border;
+  }
+}

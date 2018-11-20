@@ -1,0 +1,7 @@
+{% load i18n static %}
+{% spaceless %}
+    <a href="{% url 'index' %}" class="logo" role="banner">
+        {% static 'img/components/logo/logo.svg' as src %}
+        {% include 'components/image/image.html' with src=src alt=_('VNG Realisatie') only %}
+    </a>
+{% endspaceless %}

@@ -1,13 +1,52 @@
 {% extends "sniplates/django.html" %}
 {% load i18n sniplates %}
 
+{% block _label %}
+    {% if label %}<label class="form__label" for="{{ id_for_label }}">{{ label }}</label>{% endif %}
+{% endblock %}
 
 {% block TextInput %}
-{% reuse '_label' %}
-{{ block.super }}
+    <div class="form__control" role="group">
+        {% reuse '_label' %}
+        {% reuse 'input' css_classes='form__input' placeholder=placeholder|default:label %}
+    </div>
 {% endblock TextInput %}
 
 
 {% block submit-btn %}
-<button type="submit">{% trans "Submit" %}</button>
+    <button class="button button--primary" type="submit">{% trans 'Submit' %}</button>
 {% endblock submit-btn %}
+
+
+
+{% block CheckboxSelectMultiple %}
+    <h2 class="form__title">{{ label }}</h2>
+
+    <ul class="list">
+
+        {% for choice in choices %}
+            {% if choice.is_group %}
+                {% for val, display in choice.display %}
+                    <h3 class="form__subtitle">{{ choice.value }}</h3>
+                    {% reuse '_CheckboxSelectItem' val=val value=value display=display %}
+                {% endfor %}
+                </ul>
+            {% else %}
+                {% reuse '_CheckboxSelectItem' val=choice.value display=choice.display %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+{% block _CheckboxSelectItem %}
+    <li class="list__item">
+        {% with count=forloop.counter0|escape %}
+            {% with id_for_label=id|add:'_'|add:count %}
+                <input name="{{ html_name }}" type="checkbox" id="{{ id_for_label }}" value="{{ val }}"
+                       {% if val in value %}checked{% endif %}>&nbsp;
+                {% reuse '_label' id_for_label=id_for_label label=display %}
+            {% endwith %}
+        {% endwith %}
+    </li>
+{% endblock %}

@@ -1,57 +1,43 @@
 {% extends "master.html" %}
 {% load sniplates i18n %}
+{% spaceless %}
+
+    {% block content %}
+        <article class="article" role="article">
+            <div class="article__section">
+                <h1>{% trans "Register client" %}</h1>
+
+                {% if request.session.client_id %}
+                    <p>{% trans "Please find your newly created credentials below." %}</p>
+
+                    <dl class="definition-list">
+
+                        {% trans "Client ID" as translation_client_id %} <code>{{ request.session.client_id }}</code>
+                        {% include 'components/definition-list/definition-list-item.html' with key=translation_client_id value=request.session.client_id only %}
+                        {% trans "Secret" as translation_secret %} <code>{{ request.session.secret }}</code>
+                        {% include 'components/definition-list/definition-list-item.html' with key=translation_secret value=request.session.secret only %}
+                    </dl>
+                {% else %}
+                    <p>{% blocktrans trimmed %}
+                        Registering your client here will give you a client ID and secret,
+                        and ensure you can use the same ID and secret in all services.
+                    {% endblocktrans %}</p>
+                {% endif %}
 
 
-{% block content %}
-<article>
+                {% load_widgets form='forms.html' %}
+                <form class="form" action="." method="post">
+                    {% csrf_token %}
+                    {% form_field form.client_label %}
+                    {% widget 'form:submit-btn' %}
 
-    <h1>{% trans "Register client" %}</h1>
+                    {% if request.session.client_id %}
+                        <a class="button" href="{% url 'generate-jwt' %}">{% trans "Generate a JWT" %}</a>
+                    {% endif %}
+                </form>
+            </div>
+        </article>
 
-    {% if request.session.client_id %}
-        <section>
-            <h2>{% trans "Your credentials" %}</h2>
-            {% trans "Client ID:" %} <code>{{ request.session.client_id }}</code>
-            <br>
-            {% trans "Secret:" %} <code>{{ request.session.secret }}</code>
-            <br>
-            <a href="{% url 'generate-jwt' %}">{% trans "Generate a JWT" %}</a>
-        </section>
-    {% else %}
-        <p>{% blocktrans trimmed %}
-            Registering your client here will give you a client ID and secret,
-            and ensure you can use the same ID and secret in all services.
-        {% endblocktrans %}</p>
-    {% endif %}
-
-    <hr>
-
-    {% load_widgets form='forms.html' %}
-    <form action="." method="post">
-        {% csrf_token %}
-
-        <div>
-            {% form_field form.client_label %}
-        </div>
-
-        <hr>
-
-        {% widget 'form:submit-btn' %}
-
-    </form>
-
-</article>
-
-<aside>
-    <h1>{% trans "Services" %}</h1>
-    <ul>
-        {% for service in services %}
-            <li>
-                {{ service.label }}
-                (<a href="{{ service.api_root }}" target="_blank" rel="noopener">
-                    <code>{{ service.api_root }}</code>
-                </a>)
-            </li>
-        {% endfor %}
-    </ul>
-</aside>
-{% endblock content %}
+        {% include 'components/sidebar/sidebar.html' %}
+    {% endblock content %}
+{% endspaceless %}

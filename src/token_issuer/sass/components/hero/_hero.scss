@@ -1,0 +1,27 @@
+@import '../../lib/grid';
+
+$hero-offset-mobile: -30px;
+$hero-offset-tablet: -30px;
+$hero-offset-laptop: -215px;
+$hero-offset-desktop: -215px;
+
+.hero {
+  @include container;
+  @include container--big;
+  @include responsive(margin-bottom, $hero-offset-mobile, $hero-offset-tablet, $hero-offset-laptop, $hero-offset-desktop);
+
+  .image__image {
+    max-width: 100%;
+  }
+
+  + .content {
+    padding-top: 0!important;
+  }
+
+  + .content .sidebar {
+    @include responsive(padding-top, $article-padding-sidebar-v-mobile, $article-padding-sidebar-v-tablet, $article-padding-sidebar-v-tablet, $article-padding-sidebar-v-tablet);
+    @include responsive(padding-left, $article-padding-sidebar-h-mobile, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet);
+    @include responsive(padding-right, $article-padding-sidebar-h-mobile, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet);
+    @include responsive(margin-top, -1 * $hero-offset-mobile, -1 * $hero-offset-tablet, -1 * $hero-offset-laptop, -1 * $hero-offset-desktop);
+  }
+}

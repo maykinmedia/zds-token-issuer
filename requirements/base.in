@@ -10,5 +10,6 @@ django-axes
 django-choices
 django-sniplates
 django-solo
+easy-thumbnails
 
 # djangorestframework
