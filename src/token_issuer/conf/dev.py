@@ -75,6 +75,7 @@ ENVIRONMENT = 'development'
 # Django debug toolbar
 INSTALLED_APPS += [
     'debug_toolbar',
+    'django_extensions',
 ]
 MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',

@@ -2,3 +2,5 @@
 -r testing.txt
 
 django-debug-toolbar
+django-extensions
+Werkzeug
