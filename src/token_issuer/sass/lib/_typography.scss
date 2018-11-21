@@ -106,6 +106,10 @@ $typography-margin-2: $grid-margin-2;
     &:hover {
       text-decoration: underline;
     }
+  } @else if $hover == false {
+    &:hover {
+      text-decoration: none!important;
+    }
   }
 }
 
