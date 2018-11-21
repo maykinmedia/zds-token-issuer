@@ -2,7 +2,7 @@
 token_supplier
 ==================
 
-:Version: 0.1.0
+:Version: 0.2.0
 :Source: https://bitbucket.org/maykinmedia/token_supplier
 :Keywords: ``<keywords>``
 :PythonVersion: 3.6
