@@ -12,7 +12,7 @@ $definition-list-color-border: $color-gray;
   &__definition {
     @include body;
     @include responsive(width, 100%, 50%, 50%, 50%);
-    border-bottom: 1px solid $definition-list-color-border;
+    border-bottom: 2px solid $definition-list-color-border;
     box-sizing: border-box;
     display: inline-block;
     padding: 10px 0;
@@ -34,6 +34,6 @@ $definition-list-color-border: $color-gray;
   }
 
   + .form {
-    border-top: 1px solid $definition-list-color-border;
+    border-top: 2px solid $definition-list-color-border;
   }
 }

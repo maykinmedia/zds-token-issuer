@@ -77,11 +77,11 @@ $grid-margin-10: 100px;
   }
 }
 
-@mixin omega($force: false) {
+@mixin omega($force: false, $property: margin-right) {
   @if $force == true {
-    margin-right: 0 !important;
+    #{$property}: 0 !important;
   } @else {
-    margin-right: 0;
+    #{$property}: 0;
   }
 }
 
