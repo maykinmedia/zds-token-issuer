@@ -5,10 +5,15 @@
     {% if label %}<label class="form__label" for="{{ id_for_label }}">{{ label }}</label>{% endif %}
 {% endblock %}
 
+{% block _help %}
+{% if help_text %}<span class="form__help">{{ help_text }}</span>{% endif %}
+{% endblock _help %}
+
 {% block TextInput %}
     <div class="form__control" role="group">
         {% reuse '_label' %}
         {% reuse 'input' css_classes='form__input' placeholder=placeholder|default:label %}
+        {% reuse '_help' %}
     </div>
 {% endblock TextInput %}
 
