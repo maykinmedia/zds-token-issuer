@@ -2,7 +2,9 @@
 @import '../../lib/grid';
 @import '../../lib/typography';
 
-$article-color-background: $color-white;
+$article-color-border: $color-gray;
+$article-color-section-background: $color-white;
+$article-color-subsection-background: lighten($color-blue, 60);
 
 .article {
   @include columns-responsive(12, 8, 8, 8);
@@ -16,10 +18,17 @@ $article-color-background: $color-white;
     @include gutter(padding);
     @include gutter(margin-bottom);
     @include wysiwyg;
-    background-color: $article-color-background;
+    background-color: $article-color-section-background;
 
     &:last-child {
       @include omega(true, margin-bottom);
+    }
+  }
+
+  .definition-list,
+  .form {
+    &:not(:last-child) {
+      @include gutter(margin-bottom, 2);
     }
   }
 }

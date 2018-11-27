@@ -85,6 +85,6 @@ $grid-margin-10: 100px;
   }
 }
 
-@mixin gutter($property) {
-  @include responsive($property, $grid-gutter-mobile, $grid-gutter-tablet, $grid-gutter-laptop, $grid-gutter-desktop);
+@mixin gutter($property, $multiplier: 1) {
+  @include responsive($property, $grid-gutter-mobile * $multiplier, $grid-gutter-tablet * $multiplier, $grid-gutter-laptop * $multiplier, $grid-gutter-desktop * $multiplier);
 }

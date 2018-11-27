@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block _help %}
-{% if help_text %}<span class="form__help">{{ help_text }}</span>{% endif %}
+    {% if help_text %}<span class="form__help">{{ help_text }}</span>{% endif %}
 {% endblock _help %}
 
 {% block TextInput %}
@@ -25,22 +25,24 @@
 
 
 {% block CheckboxSelectMultiple %}
-    <h2 class="form__title">{{ label }}</h2>
+    <div class="form__control" role="group">
+        <h3 class="form__title">{{ label }}</h3>
 
-    <ul class="list">
+        <ul class="list">
 
-        {% for choice in choices %}
-            {% if choice.is_group %}
-                {% for val, display in choice.display %}
-                    <h3 class="form__subtitle">{{ choice.value }}</h3>
-                    {% reuse '_CheckboxSelectItem' val=val value=value display=display %}
-                {% endfor %}
-                </ul>
-            {% else %}
-                {% reuse '_CheckboxSelectItem' val=choice.value display=choice.display %}
-            {% endif %}
-        {% endfor %}
-    </ul>
+            {% for choice in choices %}
+                {% if choice.is_group %}
+                    {% for val, display in choice.display %}
+                        <h4 class="form__subtitle">{{ choice.value }}</h4>
+                        {% reuse '_CheckboxSelectItem' val=val value=value display=display %}
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    {% reuse '_CheckboxSelectItem' val=choice.value display=choice.display %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 
 

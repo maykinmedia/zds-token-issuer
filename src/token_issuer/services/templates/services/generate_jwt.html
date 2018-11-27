@@ -1,6 +1,8 @@
 {% extends "master.html" %}
 {% load sniplates i18n %}
 {% spaceless %}
+    {% block body-class %}generate-jwt{% endblock %}
+
 
     {% block content %}
         {% load_widgets form='forms.html' %}
@@ -8,20 +10,17 @@
         <article class="article" role="article">
             <section class="article__section">
                 <h1>{% trans "Generate a ZDS JWT" %}</h1>
-            </section>
 
-            {% if request.session.credentials.items %}
-                <section class="article__section">
-                    <p>{% trans "HTTP headers to include with the request" %}</p>
+                {% if request.session.credentials.items %}
+                    <h2>{% trans "HTTP headers to include with the request" %}</h2>
                     <dl class="definition-list">
                         {% for key, value in request.session.credentials.items %}
                             {% include 'components/definition-list/definition-list-item.html' with key=key value=value only %}
                         {% endfor %}
                     </dl>
-                </section>
-            {% endif %}
+                {% endif %}
 
-            <section class="article__section">
+                <h2>{% trans "Cliënt gegevens" %}</h2>
                 <form class="form" action="." method="post">
                     {% csrf_token %}
 

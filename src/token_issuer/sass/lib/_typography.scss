@@ -19,6 +19,12 @@ $typography-margin-2: $grid-margin-2;
   h2 {
     @include h2(true);
   }
+  h3 {
+    @include h3(true);
+  }
+  h3 {
+    @include h4(true);
+  }
   p {
     @include body(true);
   }
@@ -52,7 +58,7 @@ $typography-margin-2: $grid-margin-2;
 
 @mixin h2($margin: false, $margin-property: margin-bottom) {
   @include _h;
-  @include _margin($margin, $margin-property, $typography-margin-1);
+  @include _margin($margin, $margin-property, $typography-margin-2);
   @include responsive(font-size, 18px, 20px, 20px, 20px);
   @include responsive(font-size, 22px, 25px, 25px, 25px);
 }
@@ -62,6 +68,12 @@ $typography-margin-2: $grid-margin-2;
   @include _margin($margin, $margin-property, $typography-margin-1);
   font-size: 18px;
   line-height: 22px;
+}
+
+@mixin h4($margin: false, $margin-property: margin-bottom) {
+  @include body;
+  @include _h;
+  @include _margin($margin, $margin-property, 1rem);
 }
 
 @mixin body($margin: false, $margin-property: margin-bottom) {
