@@ -43,7 +43,12 @@ def get_zaaktypes() -> List[Dict[str, Any]]:
             'zaaktypes': [],
         }
 
-        catalogi = client.list('catalogus')
+        try:
+            catalogi = client.list('catalogus')
+        except requests.ConnectionError:
+            logger.warning("ZTC %r appears to be down, skipping...", ztc, exc_info=1)
+            continue
+
         for catalogus in catalogi:
             for url in catalogus['zaaktypen']:
                 zaaktype = client.request(url, 'zaaktype_read')
@@ -84,6 +89,9 @@ def get_scopes() -> List[str]:
         client = client_for_service(service)
         try:
             schema = client.schema
+        except requests.ConnectionError:
+            logger.warning("Service %r appears to be down, skipping...", service, exc_info=1)
+            continue
         except requests.HTTPError:
             logger.exception("Could not retrieve schema for service %s", service)
             continue
