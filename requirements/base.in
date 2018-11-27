@@ -3,13 +3,12 @@ pytz
 raven
 pyjwt
 requests
-gemma-zds-client>=0.6.2
+gemma-zds-client>=0.8.0
 
 Django
 django-axes
 django-choices
 django-sniplates
 django-solo
-easy-thumbnails
 
 # djangorestframework
