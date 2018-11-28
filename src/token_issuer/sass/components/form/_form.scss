@@ -2,41 +2,39 @@
 @import '../../lib/typography';
 @import 'constants';
 
-$form-color-border: $color-gray;
-$form-color-enabled: $color-blue;
-$form-color-focussed: $color-orange;
-
 .form {
-  &__control {
-    display: flex;
+  & &__control {
     @include gutter(margin-bottom);
-    @include responsive(flex-wrap, wrap, nowrap, nowrap, nowrap);
-    @include responsive(justify-content, stretch, space-between, space-between, space-between);
+    @include responsive(justify-content, stretch, flex-end, flex-end, flex-end);
+    display: flex;
+    flex-wrap: wrap;
   }
 
-  &__control .list {
+  & &__control .list {
     @include responsive(width, 100%, 50%, 50%, 50%);
   }
 
-  &__label,
-  &__input {
+  & &__help,
+  & &__label,
+  & &__input {
     @include body;
-    width: 100%;
+    @include responsive(width, 100%, 50%, 50%, 50%);
     height: $form-margin-4;
     line-height: $form-margin-4;
   }
 
-  &__label {
+  & &__help,
+  & &__label {
     color: $form-color-label
   }
 
-  &__input,
+  & &__input,
   .button {
     appearance: none;
     border: none;
   }
 
-  &__input {
+  & &__input {
     @include animate;
     appearance: none;
     box-sizing: border-box;
@@ -54,11 +52,16 @@ $form-color-focussed: $color-orange;
     }
   }
 
-  &__title {
+  & &__help {
+    color: $form-color-info;
+    font-style: italic;
+  }
+
+  & &__title {
     @include h3;
   }
 
-  &__subtitle {
+  & &__subtitle {
     @include h4;
   }
 

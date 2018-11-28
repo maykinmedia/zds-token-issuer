@@ -13,14 +13,7 @@
 
                 {% if request.session.credentials.items %}
                     <h2>{% trans "HTTP headers to include with the request" %}</h2>
-                    <table class="table">
-                        {% for key, value in request.session.credentials.items %}
-                            <tr class="table__row">
-                                <th class="table__heading">{{ key }}</th>
-                                <td class="table__cell">{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                    {% include 'components/table/table-credentials.html' with request=request only%}
                 {% endif %}
 
                 <h2>{% trans "Cliënt gegevens" %}</h2>
