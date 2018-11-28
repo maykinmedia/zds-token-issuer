@@ -1,5 +1,9 @@
-<th class="table__heading{% if key_class %} {{ key_class }}{% endif %}">{{ key }}</th>
-<td class="table__cell{% if value_class %} {{ value_class }}{% endif %}">
-    {% include 'components/copy/copy.html' with value=value only %}
-    {{ value }}
-</td>
+{% spaceless %}
+    <tr>
+        <th class="table__heading{% if key_class %} {{ key_class }}{% endif %}">{{ key }}</th>
+        <td class="table__cell{% if value_class %} {{ value_class }}{% endif %}">
+            {% include 'components/copy/copy.html' with value=value only %}
+            {{ value }}
+        </td>
+    </tr>
+{% endspaceless %}

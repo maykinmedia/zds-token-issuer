@@ -20,6 +20,7 @@ $copy-offset-y: 4px;
   @include soft-hide;
   top: $copy-offset-y;
   right: $copy-offset-x;
+  overflow: hidden;
 
   @at-root {
     *:hover > & {
