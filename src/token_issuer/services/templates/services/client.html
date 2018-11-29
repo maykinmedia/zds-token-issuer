@@ -10,13 +10,13 @@
                 {% if request.session.client_id %}
                     <p>{% trans "Please find your newly created credentials below." %}</p>
 
-                    <dl class="definition-list">
+                    <table class="table">
+                        {% trans "Client ID" as translation_client_id %}
+                        {% include 'components/table/row-key-value.html' with key=translation_client_id value=request.session.client_id only %}
+                        {% trans "Secret" as translation_secret %}
+                        {% include 'components/table/row-key-value.html' with key=translation_secret value=request.session.secret only %}
+                    </table>
 
-                        {% trans "Client ID" as translation_client_id %} <code>{{ request.session.client_id }}</code>
-                        {% include 'components/definition-list/definition-list-item.html' with key=translation_client_id value=request.session.client_id only %}
-                        {% trans "Secret" as translation_secret %} <code>{{ request.session.secret }}</code>
-                        {% include 'components/definition-list/definition-list-item.html' with key=translation_secret value=request.session.secret only %}
-                    </dl>
                 {% else %}
                     <p>{% blocktrans trimmed %}
                         Registering your client here will give you a client ID and secret,

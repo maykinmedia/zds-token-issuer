@@ -18,6 +18,8 @@
   "license": "UNLICENSED",
   "homepage": "https://maykinmedia.nl",
   "dependencies": {
+    "bem.js": "^1.0.10",
+    "clipboard": "^2.0.4",
     "jshint-stylish": "^2.2.1",
     "normalize.css": "^4.0.0",
     "swagger2openapi": "^3.2.14"

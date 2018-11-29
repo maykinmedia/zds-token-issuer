@@ -4,6 +4,8 @@ $hero-offset-mobile: -30px;
 $hero-offset-tablet: -30px;
 $hero-offset-laptop: -215px;
 $hero-offset-desktop: -215px;
+$hero-padding-sidebar-v-mobile: $grid-margin-4;
+$hero-padding-sidebar-v-tablet: $grid-margin-2;
 
 .hero {
   @include container;
@@ -15,13 +17,11 @@ $hero-offset-desktop: -215px;
   }
 
   + .content {
-    padding-top: 0!important;
+    padding-top: 0 !important;
   }
 
   + .content .sidebar {
-    @include responsive(padding-top, $article-padding-sidebar-v-mobile, $article-padding-sidebar-v-tablet, $article-padding-sidebar-v-tablet, $article-padding-sidebar-v-tablet);
-    @include responsive(padding-left, $article-padding-sidebar-h-mobile, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet);
-    @include responsive(padding-right, $article-padding-sidebar-h-mobile, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet, $article-padding-sidebar-h-tablet);
+    @include responsive(padding-top, $hero-padding-sidebar-v-mobile, $hero-padding-sidebar-v-tablet, $hero-padding-sidebar-v-tablet, $hero-padding-sidebar-v-tablet);
     @include responsive(margin-top, -1 * $hero-offset-mobile, -1 * $hero-offset-tablet, -1 * $hero-offset-laptop, -1 * $hero-offset-desktop);
   }
 }

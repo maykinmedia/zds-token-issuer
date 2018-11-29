@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -6,7 +7,7 @@ from django.views.generic import FormView
 from zds_client import ClientAuth
 
 from .forms import CreateCredentialsForm, GenerateJWTForm
-from .models import Service
+from .models import RegistrationError, Service
 
 
 class CreateCredentialsView(SuccessMessageMixin, FormView):
@@ -25,7 +26,10 @@ class CreateCredentialsView(SuccessMessageMixin, FormView):
         self.request.session['secret'] = secret
 
         for service in self.get_services():
-            service.register_client(client_id, secret)
+            try:
+                service.register_client(client_id, secret)
+            except RegistrationError:
+                messages.warning(self.request, f"Could not register with service '{service}'")
 
         return super().form_valid(form)
 

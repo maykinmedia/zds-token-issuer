@@ -45,7 +45,7 @@ def get_zaaktypes() -> List[Dict[str, Any]]:
 
         try:
             catalogi = client.list('catalogus')
-        except requests.ConnectionError:
+        except (requests.ConnectionError, requests.HTTPError) as e:
             logger.warning("ZTC %r appears to be down, skipping...", ztc, exc_info=1)
             continue
 

@@ -33,7 +33,7 @@ $header-margin-logo: $grid-margin-6;
     display: flex;
 
     @include mobile-only {
-      justify-content: space-between;
+      justify-content: center;
     }
   }
 
