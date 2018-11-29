@@ -5,6 +5,10 @@ import requests
 from solo.models import SingletonModel
 
 
+class RegistrationError(Exception):
+    pass
+
+
 class Service(models.Model):
     label = models.CharField(_("label"), max_length=100)
     api_root = models.CharField(_("api root url"), max_length=255)
@@ -31,10 +35,13 @@ class Service(models.Model):
         root = self._get_api_root()
         endpoint = f"{root}jwtsecret/"
 
-        response = requests.post(endpoint, json={
-            'identifier': client_id,
-            'secret': secret
-        })
+        try:
+            response = requests.post(endpoint, json={
+                'identifier': client_id,
+                'secret': secret
+            })
+        except requests.ConnectionError as exc:
+            raise RegistrationError() from exc
         assert response.status_code == 201, "Create went wrong"
 
 
