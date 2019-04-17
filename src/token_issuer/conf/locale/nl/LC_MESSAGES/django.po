@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-27 09:28+0100\n"
+"POT-Creation-Date: 2019-04-17 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,12 +77,12 @@ msgid "Client label"
 msgstr "Clientlabel"
 
 #: src/token_issuer/services/forms.py:22
-#: src/token_issuer/services/templates/services/client.html:15
+#: src/token_issuer/services/templates/services/client.html:14
 msgid "Client ID"
 msgstr "Client ID"
 
 #: src/token_issuer/services/forms.py:23
-#: src/token_issuer/services/templates/services/client.html:17
+#: src/token_issuer/services/templates/services/client.html:16
 msgid "Secret"
 msgstr "Secret"
 
@@ -94,15 +94,15 @@ msgstr "Scopes"
 msgid "Zaaktypes"
 msgstr "Zaaktypes"
 
-#: src/token_issuer/services/models.py:9
+#: src/token_issuer/services/models.py:13
 msgid "label"
 msgstr "label"
 
-#: src/token_issuer/services/models.py:10
+#: src/token_issuer/services/models.py:14
 msgid "api root url"
 msgstr "root url api"
 
-#: src/token_issuer/services/models.py:45
+#: src/token_issuer/services/models.py:52
 msgid "Service configuration"
 msgstr "Serviceconfiguratie"
 
@@ -119,23 +119,27 @@ msgid ""
 "Registering your client here will give you a client ID and secret, and "
 "ensure you can use the same ID and secret in all services."
 msgstr ""
-"Door je cliënt hier te registreren ontvang je een Client ID en secret "
-"die bij alle services gebruikt kunnen worden."
+"Door je cliënt hier te registreren ontvang je een Client ID en secret die "
+"bij alle services gebruikt kunnen worden."
 
 #: src/token_issuer/services/templates/services/client.html:35
 msgid "Generate a JWT"
 msgstr "Genereer een JWT"
 
-#: src/token_issuer/services/templates/services/generate_jwt.html:10
+#: src/token_issuer/services/templates/services/generate_jwt.html:12
 #: src/token_issuer/templates/components/navigation/navigation.html:6
-msgid "Generate a ZDS JWT"
-msgstr "Genereer een ZDS JWT"
+msgid "Generate a ZGW JWT"
+msgstr "Genereer een ZGW JWT"
 
-#: src/token_issuer/services/templates/services/generate_jwt.html:13
+#: src/token_issuer/services/templates/services/generate_jwt.html:15
 msgid "HTTP headers to include with the request"
 msgstr "HTTP-headers om op te nemen bij de request"
 
-#: src/token_issuer/services/views.py:15
+#: src/token_issuer/services/templates/services/generate_jwt.html:19
+msgid "Cliënt gegevens"
+msgstr ""
+
+#: src/token_issuer/services/views.py:16
 msgid "Your credentials have been registered with the services"
 msgstr "Je credentials werden geregistreerd bij de services"
 
@@ -143,6 +147,10 @@ msgstr "Je credentials werden geregistreerd bij de services"
 #: src/token_issuer/templates/admin/base_site.html:53
 msgid "Administration"
 msgstr "Administratie"
+
+#: src/token_issuer/templates/components/copy/copy.html:26
+msgid "Copy to clipboard"
+msgstr ""
 
 #: src/token_issuer/templates/components/hero/hero.html:5
 msgid "Smart cities banner image"
@@ -164,6 +172,6 @@ msgstr ""
 msgid "Your credentials will be registered with the following services."
 msgstr "Je credentials zullen bij de volgende services geregistreerd worden."
 
-#: src/token_issuer/templates/forms.html:17
+#: src/token_issuer/templates/forms.html:22
 msgid "Submit"
 msgstr "Bevestig"
