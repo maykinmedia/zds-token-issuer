@@ -7,7 +7,7 @@ from django.conf import settings
 import requests
 from zds_client import Client, ClientAuth
 
-from .models import Configuration, Service
+from .models import Configuration, ServiceProxy as Service
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +22,8 @@ def client_for_service(service: Service, auth=False, scopes: list=None) -> Clien
 
     if auth:
         client.auth = ClientAuth(
-            client_id=service.own_client_id,
-            secret=service.own_secret,
+            client_id=service.client_id,
+            secret=service.secret,
             scopes=scopes
         )
 

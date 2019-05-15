@@ -4,7 +4,9 @@ from django import forms
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from .constants import ComponentTypes, VertrouwelijkheidsAanduiding
+from zgw_consumers.constants import APITypes
+
+from .constants import VertrouwelijkheidsAanduiding
 from .service import get_scopes, get_zaaktypes
 
 
@@ -30,7 +32,7 @@ class RegisterAuthorizationsForm(forms.Form):
     """
     client_id = forms.CharField(label=_("Client ID"))
 
-    component = forms.ChoiceField(label=_("component"), choices=ComponentTypes.choices)
+    component = forms.ChoiceField(label=_("component"), choices=APITypes.choices)
     scopes = forms.MultipleChoiceField(
         label=_("Scopes"), required=True,
         widget=forms.CheckboxSelectMultiple

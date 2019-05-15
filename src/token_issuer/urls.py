@@ -5,7 +5,9 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 
-from .services.views import CreateCredentialsView, GenerateJWTView
+from .services.views import (
+    CreateCredentialsView, GenerateJWTView, SetAuthorizationsView
+)
 
 handler500 = 'token_issuer.utils.views.server_error'
 admin.site.site_header = 'token_issuer admin'
@@ -24,6 +26,7 @@ urlpatterns = [
     # Simply show the master template.
     path('', CreateCredentialsView.as_view(), name='index'),
     path('generate-jwt/', GenerateJWTView.as_view(), name='generate-jwt'),
+    path('set-auth/', SetAuthorizationsView.as_view(), name='set-auth'),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static

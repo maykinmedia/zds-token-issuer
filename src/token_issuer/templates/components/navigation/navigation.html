@@ -4,6 +4,7 @@
         <ul class="navigation__list">
             {% include './navigation-list-item.html' with view_name='index' label=_('Home') request=request only %}
             {% include './navigation-list-item.html' with view_name='generate-jwt' label=_('Generate a ZGW JWT') request=request only %}
+            {% include './navigation-list-item.html' with view_name='set-auth' label=_('Configure auth') request=request only %}
         </ul>
     </nav>
 {% endspaceless %}

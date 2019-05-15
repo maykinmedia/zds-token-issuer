@@ -1,0 +1,27 @@
+{% extends "master.html" %}
+{% load sniplates i18n %}
+{% spaceless %}
+    {% block body-class %}generate-jwt{% endblock %}
+
+
+    {% block content %}
+        {% load_widgets form='forms.html' %}
+
+        <article class="article" role="article">
+            <section class="article__section">
+                <h1>{% trans "Set application authorizations" %}</h1>
+
+                <h2>{% trans "Cliënt gegevens" %}</h2>
+                <form class="form" action="." method="post">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        {% form_field field %}
+                    {% endfor %}
+
+                    {% widget 'form:submit-btn' %}
+                </form>
+            </section>
+        </article>
+    {% endblock content %}
+{% endspaceless %}
