@@ -1,3 +1,5 @@
+from urllib.parse import urljoin
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,22 +21,17 @@ class Service(models.Model):
     def __str__(self):
         return self.label
 
-    def _get_api_root(self) -> str:
-        """
-        Return the API root with guaranteed trailing slash
-        """
-        slash = "/" if not self.api_root.endswith('/') else ""
-        return f"{self.api_root}{slash}"
+    def save(self, *args, **kwargs):
+        if not self.api_root.endswith('/'):
+            self.api_root = f"{self.api_root}/"
+        super().save(*args, **kwargs)
 
     @property
     def oas_url(self) -> str:
-        root = self._get_api_root()
-        return f"{root}schema/openapi.yaml"
+        return urljoin(self.api_root, 'schema/openapi.yaml')
 
     def register_client(self, client_id: str, secret: str) -> None:
-        root = self._get_api_root()
-        endpoint = f"{root}jwtsecret/"
-
+        endpoint = urljoin(self.api_root, 'jwtsecret/')
         try:
             response = requests.post(endpoint, json={
                 'identifier': client_id,

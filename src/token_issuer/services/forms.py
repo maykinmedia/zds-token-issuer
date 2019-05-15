@@ -4,6 +4,7 @@ from django import forms
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
+from .constants import ComponentTypes, VertrouwelijkheidsAanduiding
 from .service import get_scopes, get_zaaktypes
 
 
@@ -22,37 +23,34 @@ class GenerateJWTForm(forms.Form):
     client_id = forms.CharField(label=_("Client ID"))
     secret = forms.CharField(label=_("Secret"))
 
+
+class RegisterAuthorizationsForm(forms.Form):
+    """
+    A form to register the authorizations in the AC.
+    """
+    client_id = forms.CharField(label=_("Client ID"))
+
+    component = forms.ChoiceField(label=_("component"), choices=ComponentTypes.choices)
     scopes = forms.MultipleChoiceField(
-        label=_("Scopes"), required=False,
+        label=_("Scopes"), required=True,
         widget=forms.CheckboxSelectMultiple
     )
 
-    zaaktypes = forms.MultipleChoiceField(
-        label=_("Zaaktypes"), required=False,
-        widget=forms.CheckboxSelectMultiple
+    # optional type limitations
+    zaaktype = forms.URLField(
+        label=_("Zaaktype"), required=False,
+        help_text=_("Enkel deze zaaktypen worden ontsloten")
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # fetch the available zaaktypes
-        self.zaaktypes = get_zaaktypes()
-
-        zt_choices = []
-        for item in self.zaaktypes:
-            service_label = item['service'].label
-            service_address = item['service'].api_root
-            optgroup = f"{service_label} ({service_address})"
-
-            values = [
-                (zt['url'], f"{zt['omschrijving']}({zt['identificatie']})")
-                for zt in item['zaaktypes']
-            ]
-            zt_choices.append((optgroup, values))
-
-        self.fields['zaaktypes'].choices = zt_choices
-
-        # dynamically retrieve the scopes
-        self.fields['scopes'].choices = [
-            (scope, scope) for scope in sorted(get_scopes())
-        ]
+    informatieobjecttype = forms.URLField(
+        label=_("Informatieobjecttype"), required=False,
+        help_text=_("Enkel deze informatieobjecttypen worden ontsloten.")
+    )
+    besluittype = forms.URLField(
+        label=_("Besluittype"), required=False,
+        help_text=_("Enkel deze besluittypen worden ontsloten.")
+    )
+    max_vertrouwelijheidaanduiding = forms.ChoiceField(
+        label=_("Maximale vertrouwelijkheidaanduiding"),
+        choices=VertrouwelijkheidsAanduiding.choices, required=False,
+        help_text=_("Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten")
+    )

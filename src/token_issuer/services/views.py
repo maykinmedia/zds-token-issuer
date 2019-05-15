@@ -1,5 +1,9 @@
+import logging
+from concurrent.futures import ThreadPoolExecutor
+
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpRequest
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
@@ -8,6 +12,20 @@ from zds_client import ClientAuth
 
 from .forms import CreateCredentialsForm, GenerateJWTForm
 from .models import RegistrationError, Service
+
+logger = logging.getLogger(__name__)
+
+NUM_THREADS = 10
+
+
+def _register_client(service: Service, client_id: str, secret: str, request: HttpRequest):
+    logger.debug("Registering credentials to %s", service)
+    try:
+        service.register_client(client_id, secret)
+        logger.info("Registered %s with %s", client_id, service)
+    except RegistrationError:
+        logger.error("Could not register with service %s", service, exc_info=1)
+        messages.warning(request, f"Could not register with service '{service}'")
 
 
 class CreateCredentialsView(SuccessMessageMixin, FormView):
@@ -25,11 +43,13 @@ class CreateCredentialsView(SuccessMessageMixin, FormView):
         self.request.session['client_id'] = client_id
         self.request.session['secret'] = secret
 
-        for service in self.get_services():
-            try:
-                service.register_client(client_id, secret)
-            except RegistrationError:
-                messages.warning(self.request, f"Could not register with service '{service}'")
+        with ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
+            for service in self.get_services():
+                pool.submit(
+                    _register_client,
+                    service, client_id,
+                    secret, self.request
+                )
 
         return super().form_valid(form)
 
@@ -50,23 +70,18 @@ class GenerateJWTView(FormView):
             client_id=self.request.session.get('client_id', ''),
             secret=self.request.session.get('secret', ''),
         )
-        if 'claims' in self.request.session:
-            initial.update(self.request.session['claims'])
-
         return initial
 
     def form_valid(self, form):
-        claims = {
-            'scopes': form.cleaned_data['scopes'],
-            'zaaktypes': form.cleaned_data['zaaktypes'],
-        }
+        if 'client_id' not in self.request.session:
+            self.request.session['client_id'] = form.cleaned_data['client_id']
+        if 'secret' not in self.request.session:
+            self.request.session['secret'] = form.cleaned_data['secret']
 
         auth = ClientAuth(
             client_id=form.cleaned_data['client_id'],
             secret=form.cleaned_data['secret'],
-            **claims
         )
 
-        self.request.session['claims'] = claims
         self.request.session['credentials'] = auth.credentials()
         return super().form_valid(form)
