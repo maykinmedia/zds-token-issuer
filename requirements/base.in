@@ -3,7 +3,7 @@ pytz
 raven
 pyjwt
 requests
-gemma-zds-client>=0.8.0
+gemma-zds-client
 
 Django
 django-axes
