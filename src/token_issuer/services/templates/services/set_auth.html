@@ -20,7 +20,7 @@
 
             <section class="article__section" id="new-authorization">
                 <h2>{% trans "Nieuwe autorisatie" %}</h2>
-                <form class="form" action="." method="post">
+                <form class="form set-auth" action="." method="post">
                     {% csrf_token %}
 
                     {% for field in form %}
