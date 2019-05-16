@@ -16,7 +16,8 @@
 
   & &__help,
   & &__label,
-  & &__input {
+  & &__input,
+  & &__dropdown {
     @include body;
     @include responsive(width, 100%, 50%, 50%, 50%);
     height: $form-margin-4;

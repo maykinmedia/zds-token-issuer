@@ -32,7 +32,7 @@ class RegisterAuthorizationsForm(forms.Form):
     """
     client_id = forms.CharField(label=_("Client ID"))
 
-    component = forms.ChoiceField(label=_("component"), choices=APITypes.choices)
+    component = forms.ChoiceField(label=_("Component"), choices=APITypes.choices)
     scopes = forms.MultipleChoiceField(
         label=_("Scopes"), required=True,
         widget=forms.CheckboxSelectMultiple
@@ -56,3 +56,6 @@ class RegisterAuthorizationsForm(forms.Form):
         choices=VertrouwelijkheidsAanduiding.choices, required=False,
         help_text=_("Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten")
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
