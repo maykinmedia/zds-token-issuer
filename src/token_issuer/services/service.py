@@ -1,62 +1,70 @@
+import concurrent.futures
 import logging
-from typing import Any, Dict, List
-from urllib.parse import urlparse
-
-from django.conf import settings
+from typing import Any, Dict, List, Optional
 
 import requests
-from zds_client import Client, ClientAuth
+from zds_client import Client
+from zgw_consumers.constants import APITypes
 
-from .models import Configuration, ServiceProxy as Service
+from .models import ServiceProxy as Service
+from .utils import cache
 
 logger = logging.getLogger(__name__)
 
-
-def client_for_service(service: Service, auth=False, scopes: list=None) -> Client:
-    parsed_url = urlparse(service.api_root)
-
-    client = Client('service', parsed_url.path)
-
-    client.base_url = service._get_api_root()
-    client.base_dir = settings.BASE_DIR
-
-    if auth:
-        client.auth = ClientAuth(
-            client_id=service.client_id,
-            secret=service.secret,
-            scopes=scopes
-        )
-
-    return client
+NUM_THREADS = 10
 
 
-def get_zaaktypes() -> List[Dict[str, Any]]:
-    config = Configuration.get_solo()
+def _get_from_catalogus(client: Client, catalogus: dict, resource: str) -> list:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
+        futures = [
+            pool.submit(client.retrieve, resource, url=url)
+            for url in catalogus[f'{resource}n']
+        ]
+        return [future.result() for future in concurrent.futures.as_completed(futures)]
 
-    results = []
 
-    for ztc in config.ztcs.all():
-        client = client_for_service(ztc, auth=True, scopes=['zds.scopes.zaaktypes.lezen'])
+def _get_from_ztc_catalogi(service: Service, resource: str) -> Dict:
+    client = service.build_client()
 
-        result = {
-            'service': ztc,
-            'zaaktypes': [],
-        }
+    result = {
+        'service': service,
+        f'{resource}s': [],
+    }
 
-        try:
-            catalogi = client.list('catalogus')
-        except (requests.ConnectionError, requests.HTTPError) as e:
-            logger.warning("ZTC %r appears to be down, skipping...", ztc, exc_info=1)
-            continue
+    try:
+        catalogi = client.list('catalogus')
+    except (requests.ConnectionError, requests.HTTPError) as e:
+        logger.warning("ZTC %r appears to be down, skipping...", service, exc_info=1)
+        return result
 
-        for catalogus in catalogi:
-            for url in catalogus['zaaktypen']:
-                zaaktype = client.request(url, 'zaaktype_read')
-                result['zaaktypes'].append(zaaktype)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
+        futures = [pool.submit(_get_from_catalogus, client, catalogus, resource) for catalogus in catalogi]
+        results = [future.result() for future in concurrent.futures.as_completed(futures)]
 
-        results.append(result)
+    result[f'{resource}s'] = sum(results, [])
 
-    return results
+    return result
+
+
+@cache('ztc:catalogi', duration=60 * 10)
+def get_all_from_ztcs(resource: str) -> List[Dict[str, Any]]:
+    ztcs = Service.objects.filter(api_type=APITypes.ztc).iterator()
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
+        futures = [pool.submit(_get_from_ztc_catalogi, service, resource) for service in ztcs]
+        return [future.result() for future in concurrent.futures.as_completed(futures)]
+
+
+def get_zaaktypes():
+    return get_all_from_ztcs('zaaktype')
+
+
+def get_informatieobjecttypes():
+    return get_all_from_ztcs('informatieobjecttype')
+
+
+def get_besluittypes():
+    return get_all_from_ztcs('besluittype')
 
 
 def _get_security_name(schema):
@@ -79,40 +87,57 @@ def clean_scopes(scopes: List[str]) -> List[str]:
     return result
 
 
+def _fetch_scopes(service: Service) -> Optional[set]:
+    scopes = set()
+    client = service.build_client()
+    try:
+        schema = client.schema
+    except requests.ConnectionError:
+        logger.warning("Service %r appears to be down, skipping...", service, exc_info=1)
+        return
+    except requests.HTTPError:
+        logger.exception("Could not retrieve schema for service %s", service)
+        return
+
+    security_name = _get_security_name(schema)
+    if security_name is None:
+        return
+
+    for path_options in client.schema['paths'].values():
+        for method in path_options.values():
+            if not isinstance(method, dict):  # parameters list
+                continue
+
+            if 'security' not in method:
+                continue
+
+            for security in method['security']:
+                _scopes = security.get(security_name)
+                if _scopes is None:
+                    continue
+
+                scopes = scopes.union(clean_scopes(_scopes))
+
+    return scopes
+
+
+@cache('scopes', duration=60 * 60)
 def get_scopes() -> List[str]:
     """
     Check the API schemas of all services and compile a list of all the scopes.
     """
     scopes = set()
 
-    for service in Service.objects.iterator():
-        client = client_for_service(service)
-        try:
-            schema = client.schema
-        except requests.ConnectionError:
-            logger.warning("Service %r appears to be down, skipping...", service, exc_info=1)
-            continue
-        except requests.HTTPError:
-            logger.exception("Could not retrieve schema for service %s", service)
-            continue
+    with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
+        futures = []
+        for service in Service.objects.iterator():
+            future = pool.submit(_fetch_scopes, service)
+            futures.append(future)
 
-        security_name = _get_security_name(schema)
-        if security_name is None:
-            continue
-
-        for path_options in client.schema['paths'].values():
-            for method in path_options.values():
-                if not isinstance(method, dict):  # parameters list
-                    continue
-
-                if 'security' not in method:
-                    continue
-
-                for security in method['security']:
-                    _scopes = security.get(security_name)
-                    if _scopes is None:
-                        continue
-
-                    scopes = scopes.union(clean_scopes(_scopes))
+        for future in concurrent.futures.as_completed(futures):
+            _scopes = future.result()
+            if _scopes is None:
+                continue
+            scopes.update(_scopes)
 
     return scopes

@@ -7,7 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 from zgw_consumers.constants import APITypes
 
 from .constants import VertrouwelijkheidsAanduiding
-from .service import get_scopes, get_zaaktypes
+from .service import (
+    get_besluittypes, get_informatieobjecttypes, get_scopes, get_zaaktypes
+)
 
 
 class CreateCredentialsForm(forms.Form):
@@ -26,6 +28,22 @@ class GenerateJWTForm(forms.Form):
     secret = forms.CharField(label=_("Secret"))
 
 
+def default_repr(item) -> str:
+    return item['omschrijving']
+
+
+def _get_choices(container: list, key: str, transform=default_repr) -> list:
+    choices = []
+    for item in container:
+        service_label = item['service'].label
+        service_address = item['service'].api_root
+        optgroup = f"{service_label} ({service_address})"
+
+        values = [(x['url'], transform(x)) for x in item[key]]
+        choices.append((optgroup, values))
+    return choices
+
+
 class RegisterAuthorizationsForm(forms.Form):
     """
     A form to register the authorizations in the AC.
@@ -39,15 +57,15 @@ class RegisterAuthorizationsForm(forms.Form):
     )
 
     # optional type limitations
-    zaaktype = forms.URLField(
+    zaaktype = forms.ChoiceField(
         label=_("Zaaktype"), required=False,
         help_text=_("Enkel deze zaaktypen worden ontsloten")
     )
-    informatieobjecttype = forms.URLField(
+    informatieobjecttype = forms.ChoiceField(
         label=_("Informatieobjecttype"), required=False,
         help_text=_("Enkel deze informatieobjecttypen worden ontsloten.")
     )
-    besluittype = forms.URLField(
+    besluittype = forms.ChoiceField(
         label=_("Besluittype"), required=False,
         help_text=_("Enkel deze besluittypen worden ontsloten.")
     )
@@ -59,3 +77,20 @@ class RegisterAuthorizationsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # fetch and present the available scopes
+        scopes = get_scopes()
+        self.fields['scopes'].choices = [(scope, scope) for scope in sorted(scopes)]
+
+        # fetch the available zaaktypes
+        zaaktypes = get_zaaktypes()
+        self.fields['zaaktype'].choices = _get_choices(
+            zaaktypes, key='zaaktypes',
+            transform=lambda x: f"{x['omschrijving']} ({x['identificatie']})"
+        )
+
+        informatieobjecttypes = get_informatieobjecttypes()
+        self.fields['informatieobjecttype'].choices = _get_choices(informatieobjecttypes, key='informatieobjecttypes')
+
+        besluittypes = get_besluittypes()
+        self.fields['besluittype'].choices = _get_choices(besluittypes, key='besluittypes')

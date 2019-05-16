@@ -28,7 +28,7 @@
 
 
 {% block submit-btn %}
-    <button class="button button--primary" type="submit">{% trans 'Submit' %}</button>
+    <button class="button button--primary" type="submit">{{ text|default:_("Submit") }}</button>
 {% endblock submit-btn %}
 
 
