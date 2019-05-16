@@ -35,7 +35,7 @@ def default_repr(item) -> str:
 
 
 def _get_choices(container: list, key: str, transform=default_repr) -> list:
-    choices = []
+    choices = [('', '--------')]
     for item in container:
         service_label = item['service'].label
         service_address = item['service'].api_root

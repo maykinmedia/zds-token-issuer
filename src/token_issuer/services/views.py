@@ -14,7 +14,7 @@ from .forms import (
     CreateCredentialsForm, GenerateJWTForm, RegisterAuthorizationsForm
 )
 from .models import RegistrationError, ServiceProxy as Service
-from .service import get_authorizations
+from .service import add_authorization, get_authorizations
 
 logger = logging.getLogger(__name__)
 
@@ -90,10 +90,11 @@ class GenerateJWTView(FormView):
         return super().form_valid(form)
 
 
-class SetAuthorizationsView(FormView):
+class SetAuthorizationsView(SuccessMessageMixin, FormView):
     form_class = RegisterAuthorizationsForm
     template_name = "services/set_auth.html"
     success_url = reverse_lazy('generate-jwt')
+    success_message = _("The authorization has been added")
 
     def get_initial(self):
         initial = super().get_initial()
@@ -107,3 +108,11 @@ class SetAuthorizationsView(FormView):
         client_id = self.request.session.get('client_id')
         context['authorizations'] = get_authorizations(client_id)
         return context
+
+    def form_valid(self, form):
+        client_id = form.cleaned_data['client_id']
+        if 'client_id' not in self.request.session:
+            self.request.session['client_id'] = client_id
+
+        add_authorization(client_id, form.cleaned_data)
+        return super().form_valid(form)

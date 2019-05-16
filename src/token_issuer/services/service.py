@@ -143,16 +143,12 @@ def get_scopes() -> List[str]:
     return scopes
 
 
-def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
-    if not client_id:
-        return []
-
+def get_applicatie(client_id: str) -> Optional[dict]:
     config = Configuration.get_solo()
     if not config.primary_ac:
         return []
 
     client = config.primary_ac.build_client()
-
     applicaties = client.list('applicatie', query_params={
         'clientIds': client_id
     })['results']
@@ -160,11 +156,18 @@ def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
     if len(applicaties) > 1:
         logger.warning("Applications should be unique by client_id! Found "
                        "multiple for client ID '%s'", client_id)
+        return None
 
-    if not applicaties:
+    return applicaties[0]
+
+
+def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
+    if not client_id:
         return []
 
-    applicatie = applicaties[0]
+    applicatie = get_applicatie(client_id)
+    if applicatie is None:
+        return []
 
     url_to_repr = {}
     collections = (
@@ -185,3 +188,36 @@ def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
                 autorisatie[key] = f"{url_to_repr[url]} ({url})"
 
     return applicatie['autorisaties']
+
+
+def add_authorization(client_id: str, authorization: dict) -> None:
+    applicatie = get_applicatie(client_id)
+
+    config = Configuration.get_solo()
+    client = config.primary_ac.build_client()
+
+    if applicatie is not None:
+        body = applicatie
+    else:
+        # need to create it
+        body = {
+            'clientIds': [client_id],
+            'label': client_id,
+            'autorisaties': []
+        }
+
+    # add the new autorisatie
+    body['autorisaties'].append({
+        'component': authorization['component'].upper(),
+        'scopes': authorization['scopes'],
+        'zaaktype': authorization['zaaktype'],
+        'informatieobjecttype': authorization['informatieobjecttype'],
+        'besluittype': authorization['besluittype'],
+        'maxVertrouwelijkheidaanduiding': authorization['max_vertrouwelijheidaanduiding'],
+    })
+
+    if applicatie is not None:
+        url = body.pop('url')
+        client.update('applicatie', data=body, url=url)
+    else:
+        client.create('applicatie', data=body)
