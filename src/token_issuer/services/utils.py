@@ -28,3 +28,19 @@ def cache(key: str, duration: int, name='default'):
         return wrapper
 
     return decorator
+
+
+def default_repr(item) -> str:
+    return item['omschrijving']
+
+
+def _get_choices(container: list, key: str, transform=default_repr) -> list:
+    choices = []
+    for item in container:
+        service_label = item['service'].label
+        service_address = item['service'].api_root
+        optgroup = f"{service_label} ({service_address})"
+
+        values = [(x['url'], transform(x)) for x in item[key]]
+        choices.append((optgroup, values))
+    return choices

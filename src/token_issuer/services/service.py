@@ -7,7 +7,7 @@ from zds_client import Client
 from zgw_consumers.constants import APITypes
 
 from .models import Configuration, ServiceProxy as Service
-from .utils import cache
+from .utils import _get_choices, cache
 
 logger = logging.getLogger(__name__)
 
@@ -165,4 +165,23 @@ def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
         return []
 
     applicatie = applicaties[0]
+
+    url_to_repr = {}
+    collections = (
+        (get_zaaktypes(), 'zaaktypes'),
+        (get_informatieobjecttypes(), 'informatieobjecttypes'),
+        (get_besluittypes(), 'besluittypes'),
+    )
+    for container, key in collections:
+        for item in container:
+            for x in item[key]:
+                url_to_repr[x['url']] = x['omschrijving']
+
+    # replace URLs with their representations
+    for autorisatie in applicatie['autorisaties']:
+        for key in ('zaaktype', 'informatieobjecttype', 'besluittype'):
+            url = autorisatie.get(key)
+            if url and url in url_to_repr:
+                autorisatie[key] = f"{url_to_repr[url]} ({url})"
+
     return applicatie['autorisaties']

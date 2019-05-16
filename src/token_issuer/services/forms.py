@@ -10,6 +10,7 @@ from .constants import VertrouwelijkheidsAanduiding
 from .service import (
     get_besluittypes, get_informatieobjecttypes, get_scopes, get_zaaktypes
 )
+from .utils import _get_choices
 
 
 class CreateCredentialsForm(forms.Form):
@@ -26,22 +27,6 @@ class CreateCredentialsForm(forms.Form):
 class GenerateJWTForm(forms.Form):
     client_id = forms.CharField(label=_("Client ID"))
     secret = forms.CharField(label=_("Secret"))
-
-
-def default_repr(item) -> str:
-    return item['omschrijving']
-
-
-def _get_choices(container: list, key: str, transform=default_repr) -> list:
-    choices = []
-    for item in container:
-        service_label = item['service'].label
-        service_address = item['service'].api_root
-        optgroup = f"{service_label} ({service_address})"
-
-        values = [(x['url'], transform(x)) for x in item[key]]
-        choices.append((optgroup, values))
-    return choices
 
 
 class RegisterAuthorizationsForm(forms.Form):
