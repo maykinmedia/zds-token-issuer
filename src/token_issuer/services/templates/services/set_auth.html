@@ -9,9 +9,17 @@
 
         <article class="article" role="article">
             <section class="article__section">
+                <a href="#new-authorization"><strong>{% trans "Add new authorization" %}</strong></a>
                 <h1>{% trans "Set application authorizations" %}</h1>
+                <h2>{% trans "Bestaande autorisaties" %}</h2>
 
-                <h2>{% trans "Cliënt gegevens" %}</h2>
+                {% for authorization in authorizations %}
+                    {% include "services/includes/authorization.html" with authorization=authorization only %}
+                {% endfor %}
+            </section>
+
+            <section class="article__section" id="new-authorization">
+                <h2>{% trans "Nieuwe autorisatie" %}</h2>
                 <form class="form" action="." method="post">
                     {% csrf_token %}
 

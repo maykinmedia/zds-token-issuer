@@ -1,0 +1,42 @@
+<article class="authorization">
+    <header class="authorization__header">
+        <h1 class="authorization__component">{{ authorization.component }}</h1>
+    </header>
+
+    <section class="authorization__scopes">
+        {% for scope in authorization.scopes %}
+            <span class="authorization__scope-label">{{ scope }}</span>
+        {% endfor %}
+    </section>
+
+    <section class="authorization__extras">
+        {% if authorization.zaaktype %}
+            <p class="authorization__extra-field">
+                <strong>Zaaktype</strong>:
+                {{ authorization.zaaktype|urlize }}
+            </p>
+        {% endif %}
+
+        {% if authorization.informatieobjecttype %}
+            <p class="authorization__extra-field">
+                <strong>Informatieobjecttype</strong>:
+                {{ authorization.informatieobjecttype|urlize }}
+            </p>
+        {% endif %}
+
+        {% if authorization.besluitype %}
+            <p class="authorization__extra-field">
+                <strong>Besluitype</strong>:
+                {{ authorization.besluitype|urlize }}
+            </p>
+        {% endif %}
+
+        {% if authorization.maxVertrouwelijkheidaanduiding %}
+            <p class="authorization__extra-field">
+                <strong>Maximale vertrouwelijkheidaanduiding</strong>:
+                {{ authorization.maxVertrouwelijkheidaanduiding }}
+            </p>
+        {% endif %}
+
+    </section>
+</article>

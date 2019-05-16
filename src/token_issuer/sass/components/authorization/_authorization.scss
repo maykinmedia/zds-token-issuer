@@ -1,0 +1,50 @@
+@import '../../lib/color';
+@import '../../lib/typography';
+
+$authorization-border-color: $color-orange;
+$authorization-scope-border-color: $color-gray-dark;
+$authorization-scope-color: lighten($color-blue, 50%);
+
+.authorization {
+  @include body;
+  border-left: solid 4px $authorization-border-color;
+  padding: 0 1rem;
+
+  & + & {
+    margin-top: 1rem;
+  }
+
+  & &__component {
+    @include body;
+    @include body--big;
+    font-weight: bold;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  & &__scopes {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  & &__scope-label {
+    @include mono;
+    display: block;
+    border: solid 1px $authorization-scope-border-color;
+    border-radius: 2px;
+    padding: 3px 8px;
+    background: $authorization-scope-color;
+    margin-bottom: 3px;
+    margin-right: 3px;
+    font-size: 95%;
+  }
+
+  & &__extra-field {
+    @include mono;
+  }
+}

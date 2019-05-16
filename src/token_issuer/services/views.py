@@ -14,6 +14,7 @@ from .forms import (
     CreateCredentialsForm, GenerateJWTForm, RegisterAuthorizationsForm
 )
 from .models import RegistrationError, ServiceProxy as Service
+from .service import get_authorizations
 
 logger = logging.getLogger(__name__)
 
@@ -100,3 +101,9 @@ class SetAuthorizationsView(FormView):
             client_id=self.request.session.get('client_id', ''),
         )
         return initial
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        client_id = self.request.session.get('client_id')
+        context['authorizations'] = get_authorizations(client_id)
+        return context

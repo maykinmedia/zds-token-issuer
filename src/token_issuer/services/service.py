@@ -6,7 +6,7 @@ import requests
 from zds_client import Client
 from zgw_consumers.constants import APITypes
 
-from .models import ServiceProxy as Service
+from .models import Configuration, ServiceProxy as Service
 from .utils import cache
 
 logger = logging.getLogger(__name__)
@@ -141,3 +141,28 @@ def get_scopes() -> List[str]:
             scopes.update(_scopes)
 
     return scopes
+
+
+def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
+    if not client_id:
+        return []
+
+    config = Configuration.get_solo()
+    if not config.primary_ac:
+        return []
+
+    client = config.primary_ac.build_client()
+
+    applicaties = client.list('applicatie', query_params={
+        'clientIds': client_id
+    })['results']
+
+    if len(applicaties) > 1:
+        logger.warning("Applications should be unique by client_id! Found "
+                       "multiple for client ID '%s'", client_id)
+
+    if not applicaties:
+        return []
+
+    applicatie = applicaties[0]
+    return applicatie['autorisaties']
