@@ -5,6 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 
 import requests
 from solo.models import SingletonModel
+from zgw_consumers.constants import APITypes
+from zgw_consumers.models import Service as _Service
 
 
 class RegistrationError(Exception):
@@ -42,8 +44,34 @@ class Service(models.Model):
         assert response.status_code == 201, "Create went wrong"
 
 
+class ServiceProxy(_Service):
+    class Meta:
+        proxy = True
+
+    @property
+    def oas_url(self) -> str:
+        return urljoin(self.api_root, 'schema/openapi.yaml')
+
+    def register_client(self, client_id: str, secret: str) -> None:
+        endpoint = urljoin(self.api_root, 'jwtsecret/')
+        try:
+            response = requests.post(endpoint, json={
+                'identifier': client_id,
+                'secret': secret
+            })
+        except requests.ConnectionError as exc:
+            raise RegistrationError() from exc
+        assert response.status_code == 201, "Create went wrong"
+
+
 class Configuration(SingletonModel):
-    ztcs = models.ManyToManyField('Service', blank=True)
+    primary_ac = models.ForeignKey(
+        "zgw_consumers.Service", on_delete=models.SET_NULL,
+        null=True,
+        related_name="+",
+        limit_choices_to={'api_type': APITypes.ac},
+        verbose_name=_("Authorization component (AC)"),
+    )
 
     class Meta:
         verbose_name = _("Service configuration")

@@ -4,6 +4,7 @@ raven
 pyjwt
 requests
 gemma-zds-client
+zgw-consumers
 
 Django
 django-axes

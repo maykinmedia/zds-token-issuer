@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'axes',
     'sniplates',
     'solo',
+    'zgw_consumers',
 
     # Project applications.
     'token_issuer.accounts',

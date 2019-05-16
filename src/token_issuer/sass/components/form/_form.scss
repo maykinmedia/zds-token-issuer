@@ -8,6 +8,10 @@
     @include responsive(justify-content, stretch, flex-end, flex-end, flex-end);
     display: flex;
     flex-wrap: wrap;
+
+    &--hidden {
+      display: none;
+    }
   }
 
   & &__control .list {
@@ -16,7 +20,8 @@
 
   & &__help,
   & &__label,
-  & &__input {
+  & &__input,
+  & &__dropdown {
     @include body;
     @include responsive(width, 100%, 50%, 50%, 50%);
     height: $form-margin-4;

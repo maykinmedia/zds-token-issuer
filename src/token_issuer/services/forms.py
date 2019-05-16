@@ -4,8 +4,13 @@ from django import forms
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
-from .constants import ComponentTypes, VertrouwelijkheidsAanduiding
-from .service import get_scopes, get_zaaktypes
+from zgw_consumers.constants import APITypes
+
+from .constants import VertrouwelijkheidsAanduiding
+from .service import (
+    get_besluittypes, get_informatieobjecttypes, get_scopes, get_zaaktypes
+)
+from .utils import _get_choices
 
 
 class CreateCredentialsForm(forms.Form):
@@ -30,27 +35,47 @@ class RegisterAuthorizationsForm(forms.Form):
     """
     client_id = forms.CharField(label=_("Client ID"))
 
-    component = forms.ChoiceField(label=_("component"), choices=ComponentTypes.choices)
+    component = forms.ChoiceField(label=_("Component"), choices=APITypes.choices)
     scopes = forms.MultipleChoiceField(
         label=_("Scopes"), required=True,
         widget=forms.CheckboxSelectMultiple
     )
 
     # optional type limitations
-    zaaktype = forms.URLField(
+    zaaktype = forms.ChoiceField(
         label=_("Zaaktype"), required=False,
         help_text=_("Enkel deze zaaktypen worden ontsloten")
     )
-    informatieobjecttype = forms.URLField(
+    informatieobjecttype = forms.ChoiceField(
         label=_("Informatieobjecttype"), required=False,
         help_text=_("Enkel deze informatieobjecttypen worden ontsloten.")
     )
-    besluittype = forms.URLField(
+    besluittype = forms.ChoiceField(
         label=_("Besluittype"), required=False,
         help_text=_("Enkel deze besluittypen worden ontsloten.")
     )
     max_vertrouwelijheidaanduiding = forms.ChoiceField(
         label=_("Maximale vertrouwelijkheidaanduiding"),
-        choices=VertrouwelijkheidsAanduiding.choices, required=False,
+        choices=(('', '-------'),) + VertrouwelijkheidsAanduiding.choices, required=False,
         help_text=_("Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten")
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # fetch and present the available scopes
+        scopes = get_scopes()
+        self.fields['scopes'].choices = [(scope, scope) for scope in sorted(scopes)]
+
+        # fetch the available zaaktypes
+        zaaktypes = get_zaaktypes()
+        self.fields['zaaktype'].choices = _get_choices(
+            zaaktypes, key='zaaktypes',
+            transform=lambda x: f"{x['omschrijving']} ({x['identificatie']})"
+        )
+
+        informatieobjecttypes = get_informatieobjecttypes()
+        self.fields['informatieobjecttype'].choices = _get_choices(informatieobjecttypes, key='informatieobjecttypes')
+
+        besluittypes = get_besluittypes()
+        self.fields['besluittype'].choices = _get_choices(besluittypes, key='besluittypes')
