@@ -8,17 +8,9 @@
         {% load_widgets form='forms.html' %}
 
         <article class="article" role="article">
-            <section class="article__section">
-                <a href="#new-authorization"><strong>{% trans "Add new authorization" %}</strong></a>
-                <h1>{% trans "Set application authorizations" %}</h1>
-                <h2>{% trans "Bestaande autorisaties" %}</h2>
-
-                {% for authorization in authorizations %}
-                    {% include "services/includes/authorization.html" with authorization=authorization only %}
-                {% endfor %}
-            </section>
-
             <section class="article__section" id="new-authorization">
+                <a href="#existing-authorizations"><strong>{% trans "Naar bestaande autorisaties" %}</strong></a>
+                <h1>{% trans "Set application authorizations" %}</h1>
                 <h2>{% trans "Nieuwe autorisatie" %}</h2>
                 <form class="form set-auth" action="." method="post">
                     {% csrf_token %}
@@ -29,6 +21,16 @@
 
                     {% widget 'form:submit-btn' text=_("Add authorization") %}
                 </form>
+            </section>
+
+            <section class="article__section" id="existing-authorizations">
+                <h2>{% trans "Bestaande autorisaties" %}</h2>
+
+                {% for authorization in authorizations %}
+                    {% include "services/includes/authorization.html" with authorization=authorization only %}
+                {% empty %}
+                    <p>Geen bestaande autorisaties gevonden</p>
+                {% endfor %}
             </section>
         </article>
     {% endblock content %}
