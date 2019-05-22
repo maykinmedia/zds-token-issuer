@@ -54,7 +54,7 @@ class RegisterAuthorizationsForm(forms.Form):
         label=_("Besluittype"), required=False,
         help_text=_("Enkel deze besluittypen worden ontsloten.")
     )
-    max_vertrouwelijheidaanduiding = forms.ChoiceField(
+    max_vertrouwelijkheidaanduiding = forms.ChoiceField(
         label=_("Maximale vertrouwelijkheidaanduiding"),
         choices=(('', '-------'),) + VertrouwelijkheidsAanduiding.choices, required=False,
         help_text=_("Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten")

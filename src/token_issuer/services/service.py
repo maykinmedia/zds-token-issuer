@@ -7,7 +7,7 @@ from zds_client import Client
 from zgw_consumers.constants import APITypes
 
 from .models import Configuration, ServiceProxy as Service
-from .utils import _get_choices, cache
+from .utils import cache
 
 logger = logging.getLogger(__name__)
 
@@ -158,6 +158,9 @@ def get_applicatie(client_id: str) -> Optional[dict]:
                        "multiple for client ID '%s'", client_id)
         return None
 
+    if not applicaties:
+        return None
+
     return applicaties[0]
 
 
@@ -213,7 +216,7 @@ def add_authorization(client_id: str, authorization: dict) -> None:
         'zaaktype': authorization['zaaktype'],
         'informatieobjecttype': authorization['informatieobjecttype'],
         'besluittype': authorization['besluittype'],
-        'maxVertrouwelijkheidaanduiding': authorization['max_vertrouwelijheidaanduiding'],
+        'maxVertrouwelijkheidaanduiding': authorization['max_vertrouwelijkheidaanduiding'],
     })
 
     if applicatie is not None:

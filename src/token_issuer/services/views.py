@@ -93,7 +93,7 @@ class GenerateJWTView(FormView):
 class SetAuthorizationsView(SuccessMessageMixin, FormView):
     form_class = RegisterAuthorizationsForm
     template_name = "services/set_auth.html"
-    success_url = reverse_lazy('generate-jwt')
+    success_url = reverse_lazy('set-auth')
     success_message = _("The authorization has been added")
 
     def get_initial(self):
@@ -111,7 +111,7 @@ class SetAuthorizationsView(SuccessMessageMixin, FormView):
 
     def form_valid(self, form):
         client_id = form.cleaned_data['client_id']
-        if 'client_id' not in self.request.session:
+        if 'client_id' not in self.request.session or self.request.session['client_id'] != client_id:
             self.request.session['client_id'] = client_id
 
         add_authorization(client_id, form.cleaned_data)

@@ -275,6 +275,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+SESSION_COOKIE_NAME = 'tokentool_sessionid'
+
 #
 # Custom settings
 #
