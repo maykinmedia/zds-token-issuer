@@ -21,32 +21,32 @@ const STATIC_FIELDS = [
 const CONFIG = {
     'AC': {
         fields: [],
-        scopePrefix: 'autorisaties',
+        scopePrefixes: ['autorisaties'],
     },
     'NRC': {
         fields: [],
-        scopePrefix: 'notificaties',
+        scopePrefixes: ['notificaties'],
     },
 
     'ZRC': {
         fields: ['zaaktype', 'max_vertrouwelijkheidaanduiding'],
-        scopePrefix: 'zaken',
+        scopePrefixes: ['zaken', 'notificaties', 'audittrails'],
     },
     'DRC': {
         fields: ['informatieobjecttype', 'max_vertrouwelijkheidaanduiding'],
-        scopePrefix: 'documenten',
+        scopePrefixes: ['documenten', 'notificaties', 'audittrails'],
     },
     'ZTC': {
         fields: [],
-        scopePrefix: 'zaaktypes',
+        scopePrefixes: ['zaaktypes', 'notificaties', 'audittrails'],
     },
     'BRC': {
         fields: ['besluittype'],
-        scopePrefix: 'besluiten',
+        scopePrefixes: ['besluiten', 'notificaties', 'audittrails'],
     },
     'ORC': {
         fields: [],
-        scopePrefix: '',
+        scopePrefixes: [],
     },
 };
 
@@ -95,9 +95,14 @@ class SetAuth {
 
         // limit the scopes that are visible
         const scopes = [...this.node.querySelectorAll('input[name="scopes"]')];
-        const prefix = `${config.scopePrefix}.`;
+
         scopes.map(input => {
-            const visible = input.value.startsWith(prefix);
+            let visible = false;
+            config.scopePrefixes.map(prefix => {
+                if (input.value.startsWith(`${prefix}.`)) {
+                    visible = true;
+                }
+            });
             input.parentNode.classList.toggle('list__item--hidden', !visible);
         });
     }
