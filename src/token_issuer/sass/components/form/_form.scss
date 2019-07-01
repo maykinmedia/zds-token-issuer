@@ -33,6 +33,11 @@
     color: $form-color-label
   }
 
+  & &__help {
+    line-height: 25px;
+    padding-top: 10px;
+  }
+
   & &__input,
   .button {
     appearance: none;

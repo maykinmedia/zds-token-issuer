@@ -24,21 +24,29 @@ class CreateCredentialsForm(forms.Form):
         return client_id, secret
 
 
-class GenerateJWTForm(forms.Form):
+class ClientIDForm(forms.Form):
     client_id = forms.CharField(label=_("Client ID"))
+
+
+class GenerateJWTForm(ClientIDForm):
     secret = forms.CharField(label=_("Secret"))
 
 
-class RegisterAuthorizationsForm(forms.Form):
+class RegisterAuthorizationsForm(ClientIDForm):
     """
     A form to register the authorizations in the AC.
     """
-    client_id = forms.CharField(label=_("Client ID"))
-
-    component = forms.ChoiceField(label=_("Component"), choices=APITypes.choices)
+    component = forms.ChoiceField(
+        label=_("Component"),
+        choices=APITypes.choices,
+        help_text=_("The type of component to apply permissions for. "
+                    "A selection here shows the relevant possible scopes.")
+    )
     scopes = forms.MultipleChoiceField(
-        label=_("Scopes"), required=True,
-        widget=forms.CheckboxSelectMultiple
+        label=_("Scopes"),
+        required=True,
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_("Check the scopes that the consumer needs.")
     )
 
     # optional type limitations
@@ -62,6 +70,8 @@ class RegisterAuthorizationsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields["client_id"].help_text = _("A 'Client ID' of the application you wish to configure")
 
         # fetch and present the available scopes
         scopes = get_scopes()

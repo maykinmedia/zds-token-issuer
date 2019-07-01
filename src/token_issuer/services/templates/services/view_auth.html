@@ -1,0 +1,52 @@
+{% extends "master.html" %}
+{% load sniplates i18n %}
+{% spaceless %}
+
+    {% block content %}
+        {% load_widgets form='forms.html' %}
+
+        <article class="article" role="article">
+            <section class="article__section" id="new-authorization">
+                <h1>{% trans "View authorisations" %}</h1>
+                <p>
+                    {% blocktrans trimmed %}
+                    Given a <em>Client ID</em>, you can query the authorizations component
+                    to see which authorizations apply to the application. There is always
+                    a set of scopes that applies to the component. Additionally, extra
+                    fields may restrict the access to the data.
+                    {% endblocktrans %}
+                </p>
+                <form class="form view-auth" action="." method="post">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        {% form_field field %}
+                    {% endfor %}
+
+                    {% widget 'form:submit-btn' text=_("Lookup") %}
+                </form>
+            </section>
+
+            <section class="article__section">
+                <h2>{% trans "Application" %}</h2>
+                <table class="table">
+                    {% include 'components/table/row-key-value.html' with key=_("Client IDs") value=application.clientIds|join:", " only %}
+                    {% include 'components/table/row-key-value.html' with key=_("Label") value=application.label only %}
+                    {% include 'components/table/row-key-value.html' with key=_("All permissions?") value=application.heeftAlleAutorisaties|yesno only %}
+                    {% include 'components/table/row-key-value.html' with key=_("URL") value=application.url|urlize only %}
+                </table>
+            </section>
+
+            <section class="article__section" id="existing-authorizations">
+                <h2>{% trans "Authorizations" %}</h2>
+
+                {% for authorization in application.autorisaties %}
+                    {% include "services/includes/authorization.html" with authorization=authorization only %}
+                {% empty %}
+                    <p>Geen bestaande autorisaties gevonden</p>
+                {% endfor %}
+            </section>
+        </article>
+    {% endblock content %}
+
+{% endspaceless %}

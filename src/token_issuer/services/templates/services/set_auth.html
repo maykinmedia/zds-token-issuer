@@ -11,6 +11,18 @@
             <section class="article__section" id="new-authorization">
                 <a href="#existing-authorizations"><strong>{% trans "Naar bestaande autorisaties" %}</strong></a>
                 <h1>{% trans "Set application authorizations" %}</h1>
+                <p>
+                    Het autorisatiemechanisme staat uitgebreid <a href="https://ref.tst.vng.cloud/ontwikkelaars/algemeen/authenticatie-autorisatie">gedocumenteerd</a>.
+                    <br>
+                    In een notendop komt het erop neer dat er centraal vastgelegd wordt welke
+                    applicaties welke autorisaties hebben. Met deze tool kan je precies dat
+                    configureren.
+                    <br>
+                    Voor sommige componenten is het voldoende om de autorisaties éénmalig vast
+                    te leggen voor de component, voor anderen moet je deze in meer detail
+                    vastleggen. Voor de betekenis van alle scopes verwijzen we naar de
+                    betreffende componenten zelf.
+                </p>
                 <h2>{% trans "Nieuwe autorisatie" %}</h2>
                 <form class="form set-auth" action="." method="post">
                     {% csrf_token %}

@@ -1,5 +1,6 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor
+from typing import Optional
 
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -11,7 +12,8 @@ from django.views.generic import FormView
 from zds_client import ClientAuth
 
 from .forms import (
-    CreateCredentialsForm, GenerateJWTForm, RegisterAuthorizationsForm
+    ClientIDForm, CreateCredentialsForm, GenerateJWTForm,
+    RegisterAuthorizationsForm
 )
 from .models import RegistrationError, ServiceProxy as Service
 from .service import add_authorization, get_authorizations
@@ -90,29 +92,54 @@ class GenerateJWTView(FormView):
         return super().form_valid(form)
 
 
-class SetAuthorizationsView(SuccessMessageMixin, FormView):
+class SetClientIDMixin:
+
+    def _set_client_id(self, form) -> str:
+        client_id = form.cleaned_data['client_id']
+        if 'client_id' not in self.request.session or self.request.session['client_id'] != client_id:
+            self.request.session['client_id'] = client_id
+        return client_id
+
+    def _get_client_id(self) -> Optional[str]:
+        return self.request.session.get('client_id')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial.update(
+            client_id=self._get_client_id() or '',
+        )
+        return initial
+
+
+class ViewAuthView(SetClientIDMixin, FormView):
+    form_class = ClientIDForm
+    template_name = "services/view_auth.html"
+    success_url = reverse_lazy('view-auth')
+
+    def form_valid(self, form):
+        self._set_client_id(form)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        client_id = self._get_client_id()
+        context['application'] = get_authorizations(client_id)
+        return context
+
+
+class SetAuthorizationsView(SuccessMessageMixin, SetClientIDMixin, FormView):
     form_class = RegisterAuthorizationsForm
     template_name = "services/set_auth.html"
     success_url = reverse_lazy('set-auth')
     success_message = _("The authorization has been added")
 
-    def get_initial(self):
-        initial = super().get_initial()
-        initial.update(
-            client_id=self.request.session.get('client_id', ''),
-        )
-        return initial
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        client_id = self.request.session.get('client_id')
-        context['authorizations'] = get_authorizations(client_id)
+        client_id = self._get_client_id()
+        context['authorizations'] = get_authorizations(client_id)['autorisaties']
         return context
 
     def form_valid(self, form):
-        client_id = form.cleaned_data['client_id']
-        if 'client_id' not in self.request.session or self.request.session['client_id'] != client_id:
-            self.request.session['client_id'] = client_id
-
+        client_id = self._set_client_id(form)
         add_authorization(client_id, form.cleaned_data)
         return super().form_valid(form)

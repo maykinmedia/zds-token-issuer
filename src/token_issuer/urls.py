@@ -6,7 +6,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 
 from .services.views import (
-    CreateCredentialsView, GenerateJWTView, SetAuthorizationsView
+    CreateCredentialsView, GenerateJWTView, SetAuthorizationsView,
+    ViewAuthView
 )
 
 handler500 = 'token_issuer.utils.views.server_error'
@@ -26,6 +27,7 @@ urlpatterns = [
     # Simply show the master template.
     path('', CreateCredentialsView.as_view(), name='index'),
     path('generate-jwt/', GenerateJWTView.as_view(), name='generate-jwt'),
+    path('view-auth/', ViewAuthView.as_view(), name='view-auth'),
     path('set-auth/', SetAuthorizationsView.as_view(), name='set-auth'),
 ]
 

@@ -164,7 +164,7 @@ def get_applicatie(client_id: str) -> Optional[dict]:
     return applicaties[0]
 
 
-def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
+def get_authorizations(client_id: Optional[str] = None) -> Dict[str, Any]:
     if not client_id:
         return []
 
@@ -190,7 +190,7 @@ def get_authorizations(client_id: Optional[str] = None) -> List[Dict]:
             if url and url in url_to_repr:
                 autorisatie[key] = f"{url_to_repr[url]} ({url})"
 
-    return applicatie['autorisaties']
+    return applicatie
 
 
 def add_authorization(client_id: str, authorization: dict) -> None:
