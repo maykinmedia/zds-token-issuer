@@ -166,11 +166,11 @@ def get_applicatie(client_id: str) -> Optional[dict]:
 
 def get_authorizations(client_id: Optional[str] = None) -> Dict[str, Any]:
     if not client_id:
-        return []
+        return {}
 
     applicatie = get_applicatie(client_id)
     if applicatie is None:
-        return []
+        return {}
 
     url_to_repr = {}
     collections = (
