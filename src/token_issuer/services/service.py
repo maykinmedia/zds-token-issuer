@@ -32,8 +32,8 @@ def _get_from_ztc_catalogi(service: Service, resource: str) -> Dict:
     }
 
     try:
-        catalogi = client.list('catalogus')
-    except (requests.ConnectionError, requests.HTTPError) as e:
+        catalogi = client.list('catalogus')["results"]  # TODO: follow pages
+    except (requests.ConnectionError, requests.HTTPError):
         logger.warning("ZTC %r appears to be down, skipping...", service, exc_info=1)
         return result
 
