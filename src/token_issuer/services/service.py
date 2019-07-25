@@ -211,7 +211,7 @@ def add_authorization(client_id: str, authorization: dict) -> None:
 
     # add the new autorisatie
     body['autorisaties'].append({
-        'component': authorization['component'].upper(),
+        'component': authorization['component'],
         'scopes': authorization['scopes'],
         'zaaktype': authorization['zaaktype'],
         'informatieobjecttype': authorization['informatieobjecttype'],
