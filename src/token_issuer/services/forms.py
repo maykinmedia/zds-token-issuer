@@ -8,7 +8,10 @@ from zgw_consumers.constants import APITypes
 
 from .constants import VertrouwelijkheidsAanduiding
 from .service import (
-    get_besluittypes, get_informatieobjecttypes, get_scopes, get_zaaktypes
+    get_besluittypes,
+    get_informatieobjecttypes,
+    get_scopes,
+    get_zaaktypes,
 )
 from .utils import _get_choices
 
@@ -40,10 +43,6 @@ class CreateCredentialsForm(forms.Form):
 
 class ClientIDForm(forms.Form):
     client_id = forms.CharField(label=_("Client ID"))
-
-
-class GenerateJWTForm(ClientIDForm):
-    secret = forms.CharField(label=_("Secret"))
 
 
 class RegisterAuthorizationsForm(ClientIDForm):

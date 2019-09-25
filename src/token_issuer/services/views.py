@@ -11,12 +11,9 @@ from django.views.generic import FormView
 
 from zds_client import ClientAuth
 
-from .forms import (
-    ClientIDForm, CreateCredentialsForm, GenerateJWTForm,
-    RegisterAuthorizationsForm
-)
+from .forms import ClientIDForm, CreateCredentialsForm, RegisterAuthorizationsForm
 from .models import RegistrationError, ServiceProxy as Service
-from .service import add_authorization, get_authorizations
+from .service import add_authorization, create_superuser_client, get_authorizations
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +41,13 @@ class CreateCredentialsView(SuccessMessageMixin, FormView):
 
     def form_valid(self, form):
         client_id, secret = form.save()
+        superuser = form.cleaned_data["superuser"]
 
+        self.request.session["superuser"] = superuser
         self.request.session['client_id'] = client_id
         self.request.session['secret'] = secret
 
+        # register with services
         with ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
             for service in self.get_services():
                 pool.submit(
@@ -55,41 +55,29 @@ class CreateCredentialsView(SuccessMessageMixin, FormView):
                     service, client_id,
                     secret, self.request
                 )
+            messages.success(self.request, _("Client ID registered with services."))
+
+        # register the application
+        if superuser:
+            create_superuser_client(client_id, form.cleaned_data["label"])
+            messages.success(self.request, _("Application registered with superuser permissions."))
 
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['services'] = self.get_services()
+
+        # put a JWT in the session if it's not there yet
+        can_generate_creds = "client_id" in self.request.session and "secret" in self.request.session
+        if can_generate_creds and "credentials" not in self.request.session:
+            auth = ClientAuth(
+                client_id=self.request.session["client_id"],
+                secret=self.request.session["secret"],
+            )
+            self.request.session['credentials'] = auth.credentials()
+
         return context
-
-
-class GenerateJWTView(FormView):
-    template_name = 'services/generate_jwt.html'
-    form_class = GenerateJWTForm
-    success_url = reverse_lazy('generate-jwt')
-
-    def get_initial(self):
-        initial = super().get_initial()
-        initial.update(
-            client_id=self.request.session.get('client_id', ''),
-            secret=self.request.session.get('secret', ''),
-        )
-        return initial
-
-    def form_valid(self, form):
-        if 'client_id' not in self.request.session:
-            self.request.session['client_id'] = form.cleaned_data['client_id']
-        if 'secret' not in self.request.session:
-            self.request.session['secret'] = form.cleaned_data['secret']
-
-        auth = ClientAuth(
-            client_id=form.cleaned_data['client_id'],
-            secret=form.cleaned_data['secret'],
-        )
-
-        self.request.session['credentials'] = auth.credentials()
-        return super().form_valid(form)
 
 
 class SetClientIDMixin:

@@ -17,6 +17,11 @@
                         {% include 'components/table/row-key-value.html' with key=translation_secret value=request.session.secret only %}
                     </table>
 
+                    {% if request.session.credentials.items %}
+                        <h2>{% trans "HTTP headers to include with the request" %}</h2>
+                        {% include 'components/table/table-credentials.html' with request=request only%}
+                    {% endif %}
+
                 {% else %}
                     <p>{% blocktrans trimmed %}
                         Registering your client here will give you a client ID and secret,
@@ -34,10 +39,6 @@
                             {% widget 'form:submit-btn' %}
                         </div>
                     </form>
-                {% endif %}
-
-                {% if request.session.client_id %}
-                    <a class="button" href="{% url 'generate-jwt' %}">{% trans "Generate a JWT" %}</a>
                 {% endif %}
 
             </div>

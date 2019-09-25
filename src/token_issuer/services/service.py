@@ -224,3 +224,22 @@ def add_authorization(client_id: str, authorization: dict) -> None:
         client.update('applicatie', data=body, url=url)
     else:
         client.create('applicatie', data=body)
+
+
+def create_superuser_client(client_id: str, label: str) -> None:
+    # check for existing application
+    application = get_applicatie(client_id)
+    if application:
+        logger.warning("Application for client ID %s exists, aborting!", client_id)
+        return
+
+    config = Configuration.get_solo()
+    client = config.primary_ac.build_client()
+
+    body = {
+        "clientIds": [client_id],
+        "label": label,
+        "heeftAlleAutorisaties": True,
+        "autorisaties": [],
+    }
+    client.create('applicatie', data=body)

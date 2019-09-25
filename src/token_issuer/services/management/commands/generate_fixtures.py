@@ -4,7 +4,7 @@ import sys
 import uuid
 
 from django.contrib.auth.management.commands.createsuperuser import (
-    NotRunningInTTYException
+    NotRunningInTTYException,
 )
 from django.core.management import BaseCommand
 
