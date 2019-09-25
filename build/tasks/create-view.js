@@ -17,7 +17,7 @@ var VIEWS_DIR = 'views/';
  * Run using "gulp create-view --name foo [--js --sass --html-include]"
  * Creates files for a new view
  */
-gulp.task('create-view', function() {
+gulp.task('create-view', function(cb) {
     if (!argv.name) {
         console.info('Please provide --name argument!');
         return;
@@ -80,8 +80,10 @@ gulp.task('create-view', function() {
     // Creates an HTML file in includes if --html-include is passed
     if (argv.htmlInclude) {
         new file(argv.name + '.html', '')
-            .pipe(gulp.dest(paths.htmlTemplatesDir))
+            .pipe(gulp.dest(paths.htmlTemplatesDir + '/' + argv.name))
     }
+
+    cb();
 });
 
 

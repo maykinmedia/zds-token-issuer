@@ -17,7 +17,7 @@ var COMPONENTS_DIR = 'components/';
  * Run using "gulp create-component --name foo [--js --sass --html-include]"
  * Creates files for a new component (BEM block)
  */
-gulp.task('create-component', function() {
+gulp.task('create-component', function(cb) {
     if (!argv.name) {
         console.info('Please provide --name argument!');
         return;
@@ -80,8 +80,10 @@ gulp.task('create-component', function() {
     // Creates an HTML file in includes if --html-include is passed
     if (argv.htmlInclude) {
         new file(argv.name + '.html', '')
-            .pipe(gulp.dest(paths.htmlIncludesDir + argv.name))
+            .pipe(gulp.dest(paths.htmlIncludesDir + '/' + argv.name))
     }
+
+    cb()
 });
 
 

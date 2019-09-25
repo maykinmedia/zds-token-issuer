@@ -1,10 +1,8 @@
-'use strict';
-var gulp = require('gulp');
+const gulp = require('gulp');
+const { scss } = require('./scss');
+const { js } = require('./js');
 
+const build = gulp.parallel(scss, js);
 
-/**
- * Default task
- * Run using "gulp"
- * Runs "sass" and "js" tasks
- */
-gulp.task('build', ['sass', 'js']);
+gulp.task('build', build);
+exports.build = build;
