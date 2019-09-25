@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-17 10:18+0200\n"
+"POT-Creation-Date: 2019-09-25 15:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,103 +18,207 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/token_issuer/accounts/models.py:14
+#: token_issuer/accounts/models.py:14
 msgid "username"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:15
+#: token_issuer/accounts/models.py:15
 msgid "Required. 150 characters or fewer."
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:17
+#: token_issuer/accounts/models.py:17
 msgid "A user with that username already exists."
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:20
+#: token_issuer/accounts/models.py:20
 msgid "first name"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:21
+#: token_issuer/accounts/models.py:21
 msgid "last name"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:22
+#: token_issuer/accounts/models.py:22
 msgid "email address"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:24
+#: token_issuer/accounts/models.py:24
 msgid "staff status"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:25
+#: token_issuer/accounts/models.py:25
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:28
+#: token_issuer/accounts/models.py:28
 msgid "active"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:30
+#: token_issuer/accounts/models.py:30
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:34
+#: token_issuer/accounts/models.py:34
 msgid "date joined"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:42
+#: token_issuer/accounts/models.py:42
 msgid "user"
 msgstr ""
 
-#: src/token_issuer/accounts/models.py:43
+#: token_issuer/accounts/models.py:43
 msgid "users"
 msgstr ""
 
-#: src/token_issuer/services/forms.py:11
+#: token_issuer/services/forms.py:27
 msgid "Client label"
 msgstr "Clientlabel"
 
-#: src/token_issuer/services/forms.py:22
-#: src/token_issuer/services/templates/services/client.html:14
+#: token_issuer/services/forms.py:28
+msgid "Human-readable label"
+msgstr ""
+
+#: token_issuer/services/forms.py:31
+msgid "Prefix"
+msgstr "Prefix"
+
+#: token_issuer/services/forms.py:32
+msgid ""
+"Makes your client ID easier recognizable! A random string will be appended."
+msgstr ""
+"Zorgt ervoor dat je client ID makkelijker te herkennen is! Er wordt een "
+"random string toegevoegd om je client ID te genereren."
+
+#: token_issuer/services/forms.py:36
+msgid "Assign superuser permissions?"
+msgstr "Geef supergebruiker permissies?"
+
+#: token_issuer/services/forms.py:38
+msgid ""
+"Useful for prototyping and getting started quickly, but we advise against "
+"this for serious use cases."
+msgstr ""
+"Handig om prototypes te bouwen en snel aan de slag te kunnen, maar we raden "
+"dit af voor serieus gebruik."
+
+#: token_issuer/services/forms.py:51
+#: token_issuer/services/templates/services/client.html:14
 msgid "Client ID"
 msgstr "Client ID"
 
-#: src/token_issuer/services/forms.py:23
-#: src/token_issuer/services/templates/services/client.html:16
-msgid "Secret"
-msgstr "Secret"
+#: token_issuer/services/forms.py:59
+msgid "Component"
+msgstr "Component"
 
-#: src/token_issuer/services/forms.py:26
+#: token_issuer/services/forms.py:61
+msgid ""
+"The type of component to apply permissions for. A selection here shows the "
+"relevant possible scopes."
+msgstr ""
+"Het soort component waarvoor de permissies van toepassing zijn. Als je hier "
+"een keuze selecteert, dan worden de relevante mogelijke scopes getoond."
+
+#: token_issuer/services/forms.py:65
 msgid "Scopes"
 msgstr "Scopes"
 
-#: src/token_issuer/services/forms.py:31
-msgid "Zaaktypes"
-msgstr "Zaaktypes"
+#: token_issuer/services/forms.py:68
+msgid "Check the scopes that the consumer needs."
+msgstr "Vink de scopes aan die de consumer nodig heeft."
 
-#: src/token_issuer/services/models.py:13
+#: token_issuer/services/forms.py:73
+msgid "Zaaktype"
+msgstr "Zaaktype"
+
+#: token_issuer/services/forms.py:74
+msgid "Enkel deze zaaktypen worden ontsloten"
+msgstr ""
+
+#: token_issuer/services/forms.py:77
+msgid "Informatieobjecttype"
+msgstr ""
+
+#: token_issuer/services/forms.py:78
+msgid "Enkel deze informatieobjecttypen worden ontsloten."
+msgstr ""
+
+#: token_issuer/services/forms.py:81
+msgid "Besluittype"
+msgstr ""
+
+#: token_issuer/services/forms.py:82
+msgid "Enkel deze besluittypen worden ontsloten."
+msgstr ""
+
+#: token_issuer/services/forms.py:85
+msgid "Maximale vertrouwelijkheidaanduiding"
+msgstr ""
+
+#: token_issuer/services/forms.py:87
+msgid "Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten"
+msgstr ""
+
+#: token_issuer/services/forms.py:93
+msgid "A 'Client ID' of the application you wish to configure"
+msgstr "Een 'Client ID' van de applicatie die je wil configureren"
+
+#: token_issuer/services/forms.py:137
+msgid "You must specify a max_vertrouwelijkheidaanduiding for this component."
+msgstr ""
+"Je moet een maximale vertrouwelijkheidaanduiding kiezen voor dit component."
+
+#: token_issuer/services/forms.py:156
+#, python-brace-format
+msgid "You must specify the {field} for this component."
+msgstr "Je moet het {field} aangeven voor dit component."
+
+#: token_issuer/services/models.py:17
 msgid "label"
 msgstr "label"
 
-#: src/token_issuer/services/models.py:14
+#: token_issuer/services/models.py:18
 msgid "api root url"
 msgstr "root url api"
 
-#: src/token_issuer/services/models.py:52
+#: token_issuer/services/models.py:73
+msgid "Authorization component (AC)"
+msgstr "Autorisaties API (AC)"
+
+#: token_issuer/services/models.py:77
 msgid "Service configuration"
 msgstr "Serviceconfiguratie"
 
-#: src/token_issuer/services/templates/services/client.html:8
+#: token_issuer/services/templates/services/client.html:8
 msgid "Register client"
 msgstr "Cliënt registreren"
 
-#: src/token_issuer/services/templates/services/client.html:11
+#: token_issuer/services/templates/services/client.html:11
 msgid "Please find your newly created credentials below."
 msgstr "Hieronder vind je je aangemaakte gegevens."
 
-#: src/token_issuer/services/templates/services/client.html:21
+#: token_issuer/services/templates/services/client.html:16
+msgid "Secret"
+msgstr "Secret"
+
+#: token_issuer/services/templates/services/client.html:21
+msgid "HTTP headers to include with the request"
+msgstr "HTTP-headers om op te nemen bij de request"
+
+#: token_issuer/services/templates/services/client.html:27
+msgid ""
+"Your credentials require authorizations to be configured before you can "
+"access resources."
+msgstr ""
+"Je moet nog autorisaties configureren voor je met deze credentials "
+"toegang hebt tot resources in de APIs."
+
+#: token_issuer/services/templates/services/client.html:34
+msgid "Next"
+msgstr "Volgende"
+
+#: token_issuer/services/templates/services/client.html:39
 msgid ""
 "Registering your client here will give you a client ID and secret, and "
 "ensure you can use the same ID and secret in all services."
@@ -122,56 +226,145 @@ msgstr ""
 "Door je cliënt hier te registreren ontvang je een Client ID en secret die "
 "bij alle services gebruikt kunnen worden."
 
-#: src/token_issuer/services/templates/services/client.html:35
-msgid "Generate a JWT"
-msgstr "Genereer een JWT"
-
-#: src/token_issuer/services/templates/services/generate_jwt.html:12
-#: src/token_issuer/templates/components/navigation/navigation.html:6
-msgid "Generate a ZGW JWT"
-msgstr "Genereer een ZGW JWT"
-
-#: src/token_issuer/services/templates/services/generate_jwt.html:15
-msgid "HTTP headers to include with the request"
-msgstr "HTTP-headers om op te nemen bij de request"
-
-#: src/token_issuer/services/templates/services/generate_jwt.html:19
-msgid "Cliënt gegevens"
+#: token_issuer/services/templates/services/set_auth.html:12
+msgid "Naar bestaande autorisaties"
 msgstr ""
 
-#: src/token_issuer/services/views.py:16
+#: token_issuer/services/templates/services/set_auth.html:13
+msgid "Set application authorizations"
+msgstr "Configureer de applicatie-autorisaties"
+
+#: token_issuer/services/templates/services/set_auth.html:25
+msgid "Too complicated, make me superuser"
+msgstr "Te ingewikkeld, maak me supergberuiker"
+
+#: token_issuer/services/templates/services/set_auth.html:40
+msgid "Nieuwe autorisatie"
+msgstr ""
+
+#: token_issuer/services/templates/services/set_auth.html:50
+msgid "Add authorization"
+msgstr "Voeg autorisatie toe"
+
+#: token_issuer/services/templates/services/set_auth.html:55
+msgid "Bestaande autorisaties"
+msgstr ""
+
+#: token_issuer/services/templates/services/view_auth.html:10
+msgid "View authorisations"
+msgstr "Bekijk autorisaties"
+
+#: token_issuer/services/templates/services/view_auth.html:12
+msgid ""
+"Given a <em>Client ID</em>, you can query the authorizations component to "
+"see which authorizations apply to the application. There is always a set of "
+"scopes that applies to the component. Additionally, extra fields may "
+"restrict the access to the data."
+msgstr ""
+
+#: token_issuer/services/templates/services/view_auth.html:26
+msgid "Lookup"
+msgstr "Zoek op"
+
+#: token_issuer/services/templates/services/view_auth.html:31
+msgid "Application"
+msgstr "Applicatie"
+
+#: token_issuer/services/templates/services/view_auth.html:33
+#, fuzzy
+#| msgid "Client ID"
+msgid "Client IDs"
+msgstr "Client ID"
+
+#: token_issuer/services/templates/services/view_auth.html:34
+#, fuzzy
+#| msgid "label"
+msgid "Label"
+msgstr "label"
+
+#: token_issuer/services/templates/services/view_auth.html:35
+msgid "All permissions?"
+msgstr ""
+
+#: token_issuer/services/templates/services/view_auth.html:36
+msgid "URL"
+msgstr ""
+
+#: token_issuer/services/templates/services/view_auth.html:41
+msgid "Authorizations"
+msgstr "Autorisaties"
+
+#: token_issuer/services/views.py:56
 msgid "Your credentials have been registered with the services"
 msgstr "Je credentials werden geregistreerd bij de services"
 
-#: src/token_issuer/templates/admin/base_site.html:4
-#: src/token_issuer/templates/admin/base_site.html:53
+#: token_issuer/services/views.py:78
+#, fuzzy
+#| msgid "Your credentials have been registered with the services"
+msgid "Client ID registered with services."
+msgstr "Je credentials werden geregistreerd bij de services"
+
+#: token_issuer/services/views.py:83
+msgid "Application registered with superuser permissions."
+msgstr "De applicatie is geregistreerd met supergebruiker permissies."
+
+#: token_issuer/services/views.py:142
+msgid "The authorization has been added"
+msgstr "De autorisatie is toegevoegd"
+
+#: token_issuer/templates/admin/base_site.html:4
+#: token_issuer/templates/admin/base_site.html:53
 msgid "Administration"
 msgstr "Administratie"
 
-#: src/token_issuer/templates/components/copy/copy.html:26
+#: token_issuer/templates/components/copy/copy.html:26
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopieer naar klembord"
 
-#: src/token_issuer/templates/components/hero/hero.html:5
+#: token_issuer/templates/components/hero/hero.html:5
 msgid "Smart cities banner image"
 msgstr ""
 
-#: src/token_issuer/templates/components/logo/logo.html:5
+#: token_issuer/templates/components/logo/logo.html:5
 msgid "VNG Realisatie"
 msgstr ""
 
-#: src/token_issuer/templates/components/navigation/navigation.html:5
+#: token_issuer/templates/components/navigation/navigation.html:5
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
-#: src/token_issuer/templates/components/sidebar/sidebar.html:4
+#: token_issuer/templates/components/navigation/navigation.html:6
+msgid "View auth"
+msgstr "Bekijk autorisaties"
+
+#: token_issuer/templates/components/navigation/navigation.html:7
+msgid "Configure auth"
+msgstr "Configureer autorisaties"
+
+#: token_issuer/templates/components/sidebar/sidebar.html:4
 msgid "Services"
-msgstr ""
+msgstr "Services"
 
-#: src/token_issuer/templates/components/sidebar/sidebar.html:8
+#: token_issuer/templates/components/sidebar/sidebar.html:8
 msgid "Your credentials will be registered with the following services."
 msgstr "Je credentials zullen bij de volgende services geregistreerd worden."
 
-#: src/token_issuer/templates/forms.html:22
+#: token_issuer/templates/components/sidebar/sidebar.html:23
+msgid "Reset"
+msgstr "Reset"
+
+#: token_issuer/templates/components/sidebar/sidebar.html:28
+msgid ""
+"Resetting will clear your credentials from the session and allow you to "
+"generate new credentials."
+msgstr ""
+"Resetting zal je credentials uit de sessie verwijderen, wat je toelaat "
+"om nieuwe credentials te genereren."
+
+#: token_issuer/templates/components/sidebar/sidebar.html:33
+msgid "Clear credentails from session"
+msgstr "Verwijder de credentails uit de sessie"
+
+#: token_issuer/templates/forms.html:41
 msgid "Submit"
 msgstr "Bevestig"
