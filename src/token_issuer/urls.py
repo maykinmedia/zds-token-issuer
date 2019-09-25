@@ -5,7 +5,12 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path, re_path
 
-from .services.views import CreateCredentialsView, SetAuthorizationsView, ViewAuthView
+from .services.views import (
+    CreateCredentialsView,
+    ResetView,
+    SetAuthorizationsView,
+    ViewAuthView,
+)
 
 handler500 = 'token_issuer.utils.views.server_error'
 admin.site.site_header = 'token_issuer admin'
@@ -25,6 +30,7 @@ urlpatterns = [
     path('', CreateCredentialsView.as_view(), name='index'),
     path('view-auth/', ViewAuthView.as_view(), name='view-auth'),
     path('set-auth/', SetAuthorizationsView.as_view(), name='set-auth'),
+    path("reset/", ResetView.as_view(), name="reset"),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static

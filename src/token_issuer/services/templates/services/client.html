@@ -22,6 +22,19 @@
                         {% include 'components/table/table-credentials.html' with request=request only%}
                     {% endif %}
 
+                    {% if not request.session.superuser %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                Your credentials require authorizations to be configured before
+                                you can access resources.
+                            {% endblocktrans %}
+                        </p>
+
+                        <a href="{% url 'set-auth' %}">
+                            <button class="button button--primary">{% trans "Set authorizations" %}</button>
+                        </a>
+                    {% endif %}
+
                 {% else %}
                     <p>{% blocktrans trimmed %}
                         Registering your client here will give you a client ID and secret,
@@ -41,9 +54,13 @@
                     </form>
                 {% endif %}
 
+
+
             </div>
         </article>
 
         {% include 'components/sidebar/sidebar.html' %}
+
     {% endblock content %}
+
 {% endspaceless %}

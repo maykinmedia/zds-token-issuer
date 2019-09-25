@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n sniplates %}
 {% spaceless %}
     <aside class="sidebar" role="complementary">
         <h2 class="sidebar__title">{% trans "Services" %}</h2>
@@ -17,5 +17,20 @@
                 </li>
             {% endfor %}
         </ul>
+
+        {% if request.session.client_id %}
+            <h2 class="sidebar__title">{% trans "Reset" %}</h2>
+            <form action="{% url 'reset' %}" method="post">
+                {% csrf_token %}
+                {% load_widgets form='forms.html' %}
+                <p>
+                    {% blocktrans trimmed %}
+                        Resetting will clear your credentials from the session and
+                        allow you to generate new credentials.
+                    {% endblocktrans %}
+                </p>
+                {% widget 'form:submit-btn' text=_("Clear credentails from session.") %}
+            </form>
+        {% endif %}
     </aside>
 {% endspaceless %}

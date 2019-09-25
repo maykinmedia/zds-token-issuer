@@ -2,12 +2,15 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpRequest
-from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.urls import reverse, reverse_lazy
+from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView
+from django.views.generic import FormView, View
 
 from zds_client import ClientAuth
 
@@ -28,6 +31,20 @@ def _register_client(service: Service, client_id: str, secret: str, request: Htt
     except RegistrationError:
         logger.error("Could not register with service %s", service, exc_info=1)
         messages.warning(request, f"Could not register with service '{service}'")
+
+
+class ResetView(View):
+    def post(self, request, *args, **kwargs):
+        next_page = request.META.get("HTTP_REFERER", reverse("index"))
+        if not is_safe_url(next_page, settings.ALLOWED_HOSTS):
+            logger.warning("Found unsafe next_page: %s", next_page)
+            next_page = reverse("index")
+
+        for key in ["client_id", "secret", "superuser", "credentials"]:
+            if key in request.session:
+                del request.session[key]
+
+        return redirect(next_page)
 
 
 class CreateCredentialsView(SuccessMessageMixin, FormView):
