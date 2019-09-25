@@ -14,12 +14,26 @@ from .utils import _get_choices
 
 
 class CreateCredentialsForm(forms.Form):
-    client_label = forms.CharField(label=_("Client label"), help_text="Human-readable label")
+    label = forms.CharField(
+        label=_("Client label"),
+        help_text=_("Human-readable label"),
+    )
+    prefix = forms.CharField(
+        label=_("Prefix"),
+        help_text=_("Makes your client ID easier recognizable! "
+                    "A random string will be appended."),
+    )
+    superuser = forms.BooleanField(
+        label=_("Assign superuser permissions?"),
+        required=False,
+        help_text=_("Useful for prototyping and getting started quickly, but we "
+                    "advise against this for serious use cases.")
+    )
 
     def save(self, *args, **kwargs) -> Tuple[str, str]:
-        label = self.cleaned_data['client_label']
+        prefix = self.cleaned_data['prefix']
         random_client_id = get_random_string(length=12)
-        client_id = f"{label}-{random_client_id}"
+        client_id = f"{prefix}-{random_client_id}"
         secret = get_random_string(length=32)
         return client_id, secret
 

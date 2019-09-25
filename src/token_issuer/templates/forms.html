@@ -54,6 +54,17 @@
 {% endblock Select %}
 
 
+{% block CheckboxInput %}
+    <div class="form__control" role="group">
+        <label for="{{ form_field.id_for_label }}" class="form__label">
+            <input name="{{ html_name }}" id="{{ id }}" type="checkbox" {{ form_field.value|yesno:'checked,' }}>
+            {{ form_field.label }}
+        </label>
+        {% reuse '_help' %}
+    </div>
+{% endblock %}
+
+
 {% block CheckboxSelectMultiple %}
     <div class="form__control" role="group">
         {% reuse '_label'  %}

@@ -22,19 +22,24 @@
                         Registering your client here will give you a client ID and secret,
                         and ensure you can use the same ID and secret in all services.
                     {% endblocktrans %}</p>
+
+                    {% load_widgets form='forms.html' %}
+                    <form class="form" action="." method="post">
+                        {% csrf_token %}
+                        {% form_field form.label %}
+                        {% form_field form.prefix %}
+                        {% form_field form.superuser %}
+
+                        <div>
+                            {% widget 'form:submit-btn' %}
+                        </div>
+                    </form>
                 {% endif %}
 
+                {% if request.session.client_id %}
+                    <a class="button" href="{% url 'generate-jwt' %}">{% trans "Generate a JWT" %}</a>
+                {% endif %}
 
-                {% load_widgets form='forms.html' %}
-                <form class="form" action="." method="post">
-                    {% csrf_token %}
-                    {% form_field form.client_label %}
-                    {% widget 'form:submit-btn' %}
-
-                    {% if request.session.client_id %}
-                        <a class="button" href="{% url 'generate-jwt' %}">{% trans "Generate a JWT" %}</a>
-                    {% endif %}
-                </form>
             </div>
         </article>
 
