@@ -23,13 +23,13 @@
             <form action="{% url 'reset' %}" method="post">
                 {% csrf_token %}
                 {% load_widgets form='forms.html' %}
-                <p>
+                <p class="sidebar__description">
                     {% blocktrans trimmed %}
                         Resetting will clear your credentials from the session and
                         allow you to generate new credentials.
                     {% endblocktrans %}
                 </p>
-                {% widget 'form:submit-btn' text=_("Clear credentails from session.") %}
+                {% widget 'form:submit-btn' text=_("Clear credentails from session") %}
             </form>
         {% endif %}
     </aside>

@@ -16,7 +16,10 @@ from zds_client import ClientAuth
 
 from .forms import ClientIDForm, CreateCredentialsForm, RegisterAuthorizationsForm
 from .models import RegistrationError, ServiceProxy as Service
-from .service import add_authorization, create_superuser_client, get_authorizations
+from .service import (
+    add_authorization, create_superuser_client,
+    get_authorizations, make_superuser,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -138,6 +141,11 @@ class SetAuthorizationsView(SuccessMessageMixin, SetClientIDMixin, FormView):
     success_url = reverse_lazy('set-auth')
     success_message = _("The authorization has been added")
 
+    def get_form_class(self):
+        if "superuser" in self.request.POST:
+            return ClientIDForm
+        return super().get_form_class()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_id = self._get_client_id()
@@ -146,5 +154,8 @@ class SetAuthorizationsView(SuccessMessageMixin, SetClientIDMixin, FormView):
 
     def form_valid(self, form):
         client_id = self._set_client_id(form)
-        add_authorization(client_id, form.cleaned_data)
+        if "superuser" in self.request.POST:
+            make_superuser(client_id)
+        else:
+            add_authorization(client_id, form.cleaned_data)
         return super().form_valid(form)

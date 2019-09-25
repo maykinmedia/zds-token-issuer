@@ -28,6 +28,9 @@ $typography-margin-2: $grid-margin-2;
   p {
     @include body(true);
   }
+  ul {
+    @include body(true);
+  }
   a {
     @include anchor;
   }

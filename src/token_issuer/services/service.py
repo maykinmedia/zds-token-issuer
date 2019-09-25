@@ -243,3 +243,21 @@ def create_superuser_client(client_id: str, label: str) -> None:
         "autorisaties": [],
     }
     client.create('applicatie', data=body)
+
+
+def make_superuser(client_id: str) -> None:
+    application = get_applicatie(client_id)
+    assert application, "Should be an existing application"
+
+    # nothing to do
+    if application["heeftAlleAutorisaties"]:
+        return
+
+    config = Configuration.get_solo()
+    client = config.primary_ac.build_client()
+
+    application.update({
+        "heeftAlleAutorisaties": True,
+        "autorisaties": [],
+    })
+    client.update('applicatie', data=application, url=application["url"])
