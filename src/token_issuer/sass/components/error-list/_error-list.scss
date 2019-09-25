@@ -1,0 +1,7 @@
+@import '../../lib/typography';
+
+
+.error-list {
+  @include body;
+  color: $color-orange;
+}

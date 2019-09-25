@@ -15,6 +15,12 @@ from .service import (
 )
 from .utils import _get_choices
 
+SCOPE_PREFIXES = {
+    APITypes.zrc: "zaken.",
+    APITypes.drc: "documenten.",
+    APITypes.brc: "besluiten.",
+}
+
 
 class CreateCredentialsForm(forms.Form):
     label = forms.CharField(
@@ -102,3 +108,52 @@ class RegisterAuthorizationsForm(ClientIDForm):
 
         besluittypes = get_besluittypes()
         self.fields['besluittype'].choices = _get_choices(besluittypes, key='besluittypes')
+
+    def clean(self):
+        component = self.cleaned_data.get("component")
+        scopes = self.cleaned_data.get("scopes")
+        max_vertrouwelijkheidaanduiding = self.cleaned_data.get("max_vertrouwelijkheidaanduiding")
+
+        if not component:
+            return
+
+        if not scopes:
+            return
+
+        scope_prefix = SCOPE_PREFIXES.get(component)
+        component_specific_scope_used = (
+            scope_prefix is not None
+            and any(scope.startswith(scope_prefix) for scope in scopes)
+        )
+
+        if (
+            component in [APITypes.zrc, APITypes.drc]
+            and component_specific_scope_used
+            and not max_vertrouwelijkheidaanduiding
+        ):
+            self.add_error(
+                "max_vertrouwelijkheidaanduiding",
+                forms.ValidationError(
+                    _("You must specify a max_vertrouwelijkheidaanduiding for this component."),
+                    code="required"
+                )
+            )
+
+        for _component, field in (
+            (APITypes.zrc, "zaaktype"),
+            (APITypes.drc, "informatieobjecttype"),
+            (APITypes.brc, "besluittype"),
+        ):
+
+            if (
+                component == _component
+                and component_specific_scope_used
+                and not self.cleaned_data.get(field)
+            ):
+                self.add_error(
+                    field,
+                    forms.ValidationError(
+                        _("You must specify the {field} for this component.").format(field=field),
+                        code="required"
+                    )
+                )

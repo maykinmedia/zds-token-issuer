@@ -28,6 +28,10 @@
     line-height: $form-margin-4;
   }
 
+  & .error-list {
+    @include responsive(width, 100%, 50%, 50%, 50%);
+  }
+
   & &__help,
   & &__label {
     color: $form-color-label

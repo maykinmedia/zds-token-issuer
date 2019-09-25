@@ -9,6 +9,16 @@
     {% if help_text %}<p class="form__help">{{ help_text }}</p>{% endif %}
 {% endblock _help %}
 
+{% block _errors %}
+{% if errors %}
+    <ul class="error-list">
+        {% for error in errors %}
+            <li class="error">{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock _errors %}
+
 {% block TextInput %}
     <div class="form__control" role="group">
         {% reuse '_label' %}
@@ -49,6 +59,7 @@
         {% endif %}
     {% endfor %}
     </select>
+    {% reuse '_errors' %}
     {% reuse '_help' %}
 </div>
 {% endblock Select %}

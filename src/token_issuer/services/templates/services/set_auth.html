@@ -27,6 +27,8 @@
                 <form class="form set-auth" action="." method="post">
                     {% csrf_token %}
 
+                    {{ form.errors }}
+
                     {% for field in form %}
                         {% form_field field %}
                     {% endfor %}
