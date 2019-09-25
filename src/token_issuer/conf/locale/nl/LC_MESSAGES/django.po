@@ -236,7 +236,7 @@ msgstr "Configureer de applicatie-autorisaties"
 
 #: token_issuer/services/templates/services/set_auth.html:25
 msgid "Too complicated, make me superuser"
-msgstr "Te ingewikkeld, maak me supergberuiker"
+msgstr "Te ingewikkeld, maak me supergebruiker"
 
 #: token_issuer/services/templates/services/set_auth.html:40
 msgid "Nieuwe autorisatie"
