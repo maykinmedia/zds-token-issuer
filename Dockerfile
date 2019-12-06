@@ -13,16 +13,7 @@ RUN apk --no-cache add \
     musl-dev \
     pcre-dev \
     linux-headers \
-    postgresql-dev \
-    # libraries installed using git
-    git \
-    # lxml dependencies
-    libxslt-dev \
-    # pillow dependencies
-    jpeg-dev \
-    openjpeg-dev \
-    zlib-dev
-
+    postgresql-dev
 
 WORKDIR /app
 
@@ -36,9 +27,6 @@ RUN pip install -r requirements/production.txt
 # Stage 2 - Install frontend deps and build assets
 FROM mhart/alpine-node:10 AS frontend-build
 
-RUN apk --no-cache add \
-    git
-
 WORKDIR /app
 
 # copy configuration/build files
@@ -47,7 +35,7 @@ COPY ./*.js /app/
 COPY ./build /app/build/
 
 # install WITH dev tooling
-RUN npm install
+RUN npm ci
 
 # copy source code
 COPY ./src /app/src
@@ -64,17 +52,7 @@ RUN apk --no-cache add \
     mailcap \
     musl \
     pcre \
-    postgresql \
-    # lxml dependencies
-    libxslt \
-    # pillow dependencies
-    jpeg \
-    openjpeg \
-    zlib \
-    # some nodejs tooling needed
-    git \
-    nodejs \
-    nodejs-npm
+    postgresql
 
 WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
@@ -83,10 +61,6 @@ RUN mkdir /app/log
 # copy backend build deps
 COPY --from=backend-build /usr/local/lib/python3.7 /usr/local/lib/python3.7
 COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
-
-# set up production nodejs things
-COPY ./*.json /app/
-RUN npm install --production
 
 # copy build statics
 COPY --from=frontend-build /app/src/token_issuer/static /app/src/token_issuer/static

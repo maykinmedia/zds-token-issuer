@@ -1,8 +1,8 @@
 const gulp = require('gulp');
-const { scss } = require('./scss');
-const { js } = require('./js');
+const {js} = require('./js');
+const {scss} = require('./scss');
 
-const build = gulp.parallel(scss, js);
+const build = gulp.parallel(js, scss);
 
 gulp.task('build', build);
 exports.build = build;
