@@ -2,7 +2,7 @@
 token_supplier
 ==================
 
-:Version: 0.5.0
+:Version: 0.6.2
 :Source: https://github.com/maykinmedia/zds-token-issuer
 :Keywords: auth, tokens, zgw-api, zaken
 :PythonVersion: 3.7
