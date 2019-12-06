@@ -6,31 +6,20 @@ services:
     # NOTE: No persistance storage configured.
     # See: https://hub.docker.com/_/postgres/
     image: postgres:10
+
+  cache:
+    image: redis:latest
+
   web:
     build: .
     environment:
       - DJANGO_SETTINGS_MODULE=token_issuer.conf.docker
       - SECRET_KEY=${SECRET_KEY:-#*8=vm+v=4w_z4pev+v8v$^v96#g1oo^siqg!i#s*9qb#e2b_n}
+      - ALLOWED_HOSTS=*
+      - IS_HTTPS=no
+      - CACHE_DEFAULT=cache:6379/0
+      - CACHE_AXES=cache:6379/0
     ports:
       - 8000:8000
     depends_on:
       - db
-
-  # See: src/token_issuer/conf/docker.py
-  # Optional containers below:
-#  elasticsearch:
-#    # NOTE: No persistance storage configured.
-#    # See: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
-#    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
-#    container_name: elasticsearch
-#    environment:
-#      - discovery.type=single-node
-#      - cluster.routing.allocation.disk.threshold_enabled=false
-#    ports:
-#      - 9200:9200
-#  redis:
-#    # NOTE: No persistance storage configured.
-#    # See: https://hub.docker.com/_/redis/
-#    image: redis
-#    ports:
-#        - 6379:6379

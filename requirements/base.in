@@ -1,16 +1,22 @@
-psycopg2
-pytz
-raven
-pyjwt
-requests
-gemma-zds-client
-zgw-consumers
-python-dotenv
+# Core python libraries
 python-decouple
+python-dotenv
+gemma-zds-client
+psycopg2
+pyjwt
+pytz
+requests
+uwsgi
+zgw-consumers
 
+# Framework libraries
 Django<3.0
 django-axes
 django-choices
 django-sniplates
 django-solo
 django-redis
+
+# WSGI servers & monitoring - production oriented
+uwsgi
+raven  # error monitoring sentry

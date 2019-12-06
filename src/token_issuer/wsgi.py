@@ -8,5 +8,7 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 """
 from django.core.wsgi import get_wsgi_application
 
+from token_issuer.setup import setup_env
 
+setup_env()
 application = get_wsgi_application()

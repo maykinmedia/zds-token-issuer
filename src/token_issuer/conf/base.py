@@ -1,5 +1,9 @@
 import os
 
+import raven
+
+from .environ import config
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 DJANGO_PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 BASE_DIR = os.path.abspath(os.path.join(DJANGO_PROJECT_DIR, os.path.pardir, os.path.pardir))
@@ -8,22 +12,43 @@ BASE_DIR = os.path.abspath(os.path.join(DJANGO_PROJECT_DIR, os.path.pardir, os.p
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config("DEBUG", default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="", split=True)
+
+IS_HTTPS = config("IS_HTTPS", default=not DEBUG)
 
 DATABASES = {
-    'default': {
+    "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'token_issuer'),
-        'USER': os.getenv('DB_USER', 'token_issuer'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'token_issuer'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', 5432),
+        "NAME": config("DB_NAME", "openzaak"),
+        "USER": config("DB_USER", "openzaak"),
+        "PASSWORD": config("DB_PASSWORD", "openzaak"),
+        "HOST": config("DB_HOST", "localhost"),
+        "PORT": config("DB_PORT", 5432),
     }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{config('CACHE_DEFAULT', 'localhost:6379/0')}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "IGNORE_EXCEPTIONS": True,
+        },
+    },
+    "axes": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{config('CACHE_AXES', 'localhost:6379/0')}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "IGNORE_EXCEPTIONS": True,
+        },
+    },
 }
 
 # Application definition
@@ -39,19 +64,8 @@ INSTALLED_APPS = [
     # 'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # Optional applications.
     'django.contrib.admin',
-    # 'django.contrib.admindocs',
-    # 'django.contrib.humanize',
-    # 'django.contrib.sitemaps',
-
-    # django-admin-tools
-    # 'admin_tools',
-    # 'admin_tools.theming',
-    # 'admin_tools.menu',
-    # 'admin_tools.dashboard',
-
     # External applications.
     'axes',
     'sniplates',
@@ -78,7 +92,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'token_issuer.urls'
 
 # List of callables that know how to import templates from various sources.
-RAW_TEMPLATE_LOADERS = (
+TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     # 'admin_tools.template_loaders.Loader',
@@ -99,7 +113,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'token_issuer.utils.context_processors.settings',
             ],
-            'loaders': RAW_TEMPLATE_LOADERS
+            'loaders': TEMPLATE_LOADERS
         },
     },
 ]
@@ -176,7 +190,16 @@ FIXTURE_DIRS = (
     os.path.join(DJANGO_PROJECT_DIR, 'fixtures'),
 )
 
-DEFAULT_FROM_EMAIL = 'token_issuer@example.com'
+#
+# Sending EMAIL
+#
+EMAIL_HOST = config("EMAIL_HOST", default="localhost")
+EMAIL_PORT = config(
+    "EMAIL_PORT", default=25
+)  # disabled on Google Cloud, use 487 instead
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=False)
 EMAIL_TIMEOUT = 10
 
 LOGGING_DIR = os.path.join(BASE_DIR, 'log')
@@ -278,11 +301,29 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_NAME = 'tokentool_sessionid'
 
 #
+# SECURITY settings
+#
+SESSION_COOKIE_SECURE = IS_HTTPS
+SESSION_COOKIE_HTTPONLY = True
+
+CSRF_COOKIE_SECURE = IS_HTTPS
+
+X_FRAME_OPTIONS = "DENY"
+
+#
 # Custom settings
 #
 PROJECT_NAME = 'token_issuer'
 ENVIRONMENT = None
 SHOW_ALERT = True
+
+if "GIT_SHA" in os.environ:
+    GIT_SHA = config("GIT_SHA", "")
+# in docker (build) context, there is no .git directory
+elif os.path.exists(os.path.join(BASE_DIR, ".git")):
+    GIT_SHA = raven.fetch_git_sha(BASE_DIR)
+else:
+    GIT_SHA = None
 
 #
 # Library settings
@@ -291,16 +332,17 @@ SHOW_ALERT = True
 ADMIN_INDEX_SHOW_REMAINING_APPS = True
 
 # Django-axes
+AXES_CACHE = "axes"
 AXES_LOGIN_FAILURE_LIMIT = 30  # Default: 3
 AXES_LOCK_OUT_AT_FAILURE = True  # Default: True
 AXES_USE_USER_AGENT = False  # Default: False
 AXES_COOLOFF_TIME = 1  # One hour
-AXES_BEHIND_REVERSE_PROXY = True  # Default: False (we are typically using Nginx as reverse proxy)
+AXES_BEHIND_REVERSE_PROXY = IS_HTTPS  # Default: False (we are typically using Nginx as reverse proxy)
 AXES_ONLY_USER_FAILURES = False  # Default: False (you might want to block on username rather than IP)
 AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = False  # Default: False (you might want to block on username and IP)
 
 # Raven
-SENTRY_DSN = os.getenv('SENTRY_DSN')
+SENTRY_DSN = config("SENTRY_DSN", None)
 
 if SENTRY_DSN:
     INSTALLED_APPS = INSTALLED_APPS + [
