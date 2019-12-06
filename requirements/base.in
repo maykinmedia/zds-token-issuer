@@ -5,9 +5,12 @@ pyjwt
 requests
 gemma-zds-client
 zgw-consumers
+python-dotenv
+python-decouple
 
-Django
+Django<3.0
 django-axes
 django-choices
 django-sniplates
 django-solo
+django-redis
