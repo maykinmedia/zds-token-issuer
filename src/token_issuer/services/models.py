@@ -24,21 +24,20 @@ class Service(models.Model):
         return self.label
 
     def save(self, *args, **kwargs):
-        if not self.api_root.endswith('/'):
+        if not self.api_root.endswith("/"):
             self.api_root = f"{self.api_root}/"
         super().save(*args, **kwargs)
 
     @property
     def oas_url(self) -> str:
-        return urljoin(self.api_root, 'schema/openapi.yaml')
+        return urljoin(self.api_root, "schema/openapi.yaml")
 
     def register_client(self, client_id: str, secret: str) -> None:
-        endpoint = urljoin(self.api_root, 'jwtsecret/')
+        endpoint = urljoin(self.api_root, "jwtsecret/")
         try:
-            response = requests.post(endpoint, json={
-                'identifier': client_id,
-                'secret': secret
-            })
+            response = requests.post(
+                endpoint, json={"identifier": client_id, "secret": secret}
+            )
         except requests.ConnectionError as exc:
             raise RegistrationError() from exc
         assert response.status_code == 201, "Create went wrong"
@@ -50,15 +49,14 @@ class ServiceProxy(_Service):
 
     @property
     def oas_url(self) -> str:
-        return urljoin(self.api_root, 'schema/openapi.yaml')
+        return urljoin(self.api_root, "schema/openapi.yaml")
 
     def register_client(self, client_id: str, secret: str) -> None:
-        endpoint = urljoin(self.api_root, 'jwtsecret/')
+        endpoint = urljoin(self.api_root, "jwtsecret/")
         try:
-            response = requests.post(endpoint, json={
-                'identifier': client_id,
-                'secret': secret
-            })
+            response = requests.post(
+                endpoint, json={"identifier": client_id, "secret": secret}
+            )
         except requests.ConnectionError as exc:
             raise RegistrationError() from exc
         assert response.status_code == 201, "Create went wrong"
@@ -66,10 +64,11 @@ class ServiceProxy(_Service):
 
 class Configuration(SingletonModel):
     primary_ac = models.ForeignKey(
-        "zgw_consumers.Service", on_delete=models.SET_NULL,
+        "zgw_consumers.Service",
+        on_delete=models.SET_NULL,
         null=True,
         related_name="+",
-        limit_choices_to={'api_type': APITypes.ac},
+        limit_choices_to={"api_type": APITypes.ac},
         verbose_name=_("Authorization component (AC)"),
     )
 

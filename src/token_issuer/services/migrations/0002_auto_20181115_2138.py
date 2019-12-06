@@ -6,37 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('services', '0001_initial'),
+        ("services", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Configuration',
+            name="Configuration",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
-            options={
-                'verbose_name': 'Service configuration',
-            },
+            options={"verbose_name": "Service configuration",},
         ),
         migrations.AddField(
-            model_name='service',
-            name='own_client_id',
+            model_name="service",
+            name="own_client_id",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AddField(
-            model_name='service',
-            name='own_secret',
+            model_name="service",
+            name="own_secret",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AlterField(
-            model_name='service',
-            name='api_root',
-            field=models.CharField(max_length=255, verbose_name='api root url'),
+            model_name="service",
+            name="api_root",
+            field=models.CharField(max_length=255, verbose_name="api root url"),
         ),
         migrations.AddField(
-            model_name='configuration',
-            name='ztcs',
-            field=models.ManyToManyField(blank=True, to='services.Service'),
+            model_name="configuration",
+            name="ztcs",
+            field=models.ManyToManyField(blank=True, to="services.Service"),
         ),
     ]

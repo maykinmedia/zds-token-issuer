@@ -27,7 +27,7 @@ class Command(BaseCommand):
         secret = options["secret"]
 
         if not client_id or not secret:
-            if hasattr(self.stdin, 'isatty') and not self.stdin.isatty():
+            if hasattr(self.stdin, "isatty") and not self.stdin.isatty():
                 raise NotRunningInTTYException("Not running in a TTY")
 
             if not client_id:
@@ -36,16 +36,18 @@ class Command(BaseCommand):
             if not secret:
                 secret = self.get_input_data("Secret: ")
 
-        ac_data = [{
-            "model": "authorizations.applicatie",
-            "pk": 999,
-            "fields": {
-                "uuid": str(uuid.uuid4()),
-                "client_ids": [client_id],
-                "label": "My superuser client",
-                "heeft_alle_autorisaties": True
+        ac_data = [
+            {
+                "model": "authorizations.applicatie",
+                "pk": 999,
+                "fields": {
+                    "uuid": str(uuid.uuid4()),
+                    "client_ids": [client_id],
+                    "label": "My superuser client",
+                    "heeft_alle_autorisaties": True,
+                },
             }
-        }]
+        ]
 
         with open(os.path.join(output_dir, "ac.json"), "w") as outfile:
             json.dump(ac_data, outfile, indent=4)
@@ -53,10 +55,7 @@ class Command(BaseCommand):
         api_credential = {
             "model": "vng_api_common.jwtsecret",
             "pk": 999,
-            "fields": {
-                "identifier": client_id,
-                "secret": secret,
-            }
+            "fields": {"identifier": client_id, "secret": secret,},
         }
 
         ports = [8000, 8001, 8002, 8003, 8004, 8005]
@@ -71,7 +70,7 @@ class Command(BaseCommand):
                     "secret": secret,
                     "user_id": "system",
                     "user_representation": "System",
-                }
+                },
             }
             for i, port in enumerate(ports)
         ]
@@ -85,6 +84,6 @@ class Command(BaseCommand):
         validation exceptions.
         """
         raw_value = input(message)
-        if default and raw_value == '':
+        if default and raw_value == "":
             raw_value = default
         return raw_value

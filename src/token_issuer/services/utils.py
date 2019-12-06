@@ -3,10 +3,8 @@ from functools import wraps
 from django.core.cache import caches
 
 
-def cache(key: str, duration: int, name='default'):
-
+def cache(key: str, duration: int, name="default"):
     def decorator(func):
-
         @wraps(func)
         def wrapper(*args, **kwargs):
             cache_key = key
@@ -31,16 +29,16 @@ def cache(key: str, duration: int, name='default'):
 
 
 def default_repr(item) -> str:
-    return item['omschrijving']
+    return item["omschrijving"]
 
 
 def _get_choices(container: list, key: str, transform=default_repr) -> list:
-    choices = [('', '--------')]
+    choices = [("", "--------")]
     for item in container:
-        service_label = item['service'].label
-        service_address = item['service'].api_root
+        service_label = item["service"].label
+        service_address = item["service"].api_root
         optgroup = f"{service_label} ({service_address})"
 
-        values = [(x['url'], transform(x)) for x in item[key]]
+        values = [(x["url"], transform(x)) for x in item[key]]
         choices.append((optgroup, values))
     return choices

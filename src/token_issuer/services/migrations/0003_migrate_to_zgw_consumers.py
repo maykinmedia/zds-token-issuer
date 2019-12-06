@@ -4,24 +4,24 @@ from django.db import migrations
 
 
 def migrate_to_zgw(apps, _):
-    OldService = apps.get_model('services', 'Service')
-    NewService = apps.get_model('zgw_consumers', 'Service')
+    OldService = apps.get_model("services", "Service")
+    NewService = apps.get_model("zgw_consumers", "Service")
 
     for old_service in OldService.objects.all():
         NewService.objects.create(
             label=old_service.label,
-            api_type='ZRC',
+            api_type="ZRC",
             api_root=old_service.api_root,
             client_id=OldService.own_client_id,
-            secret=OldService.own_secret
+            secret=OldService.own_secret,
         )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('services', '0002_auto_20181115_2138'),
-        ('zgw_consumers', '0003_auto_20190514_1009'),
+        ("services", "0002_auto_20181115_2138"),
+        ("zgw_consumers", "0003_auto_20190514_1009"),
     ]
 
     operations = [

@@ -11,4 +11,4 @@ from .production import *  # noqa isort:skip
 # Custom settings
 #
 
-ENVIRONMENT = 'docker'
+ENVIRONMENT = "docker"

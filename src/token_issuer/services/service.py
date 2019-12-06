@@ -18,7 +18,7 @@ def _get_from_catalogus(client: Client, catalogus: dict, resource: str) -> list:
     with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
         futures = [
             pool.submit(client.retrieve, resource, url=url)
-            for url in catalogus[f'{resource}n']
+            for url in catalogus[f"{resource}n"]
         ]
         return [future.result() for future in concurrent.futures.as_completed(futures)]
 
@@ -27,50 +27,57 @@ def _get_from_ztc_catalogi(service: Service, resource: str) -> Dict:
     client = service.build_client()
 
     result = {
-        'service': service,
-        f'{resource}s': [],
+        "service": service,
+        f"{resource}s": [],
     }
 
     try:
-        catalogi = client.list('catalogus')["results"]  # TODO: follow pages
+        catalogi = client.list("catalogus")["results"]  # TODO: follow pages
     except (requests.ConnectionError, requests.HTTPError):
         logger.warning("ZTC %r appears to be down, skipping...", service, exc_info=1)
         return result
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
-        futures = [pool.submit(_get_from_catalogus, client, catalogus, resource) for catalogus in catalogi]
-        results = [future.result() for future in concurrent.futures.as_completed(futures)]
+        futures = [
+            pool.submit(_get_from_catalogus, client, catalogus, resource)
+            for catalogus in catalogi
+        ]
+        results = [
+            future.result() for future in concurrent.futures.as_completed(futures)
+        ]
 
-    result[f'{resource}s'] = sum(results, [])
+    result[f"{resource}s"] = sum(results, [])
 
     return result
 
 
-@cache('ztc:catalogi', duration=60 * 10)
+@cache("ztc:catalogi", duration=60 * 10)
 def get_all_from_ztcs(resource: str) -> List[Dict[str, Any]]:
     ztcs = Service.objects.filter(api_type=APITypes.ztc).iterator()
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
-        futures = [pool.submit(_get_from_ztc_catalogi, service, resource) for service in ztcs]
+        futures = [
+            pool.submit(_get_from_ztc_catalogi, service, resource) for service in ztcs
+        ]
         return [future.result() for future in concurrent.futures.as_completed(futures)]
 
 
 def get_zaaktypes():
-    return get_all_from_ztcs('zaaktype')
+    return get_all_from_ztcs("zaaktype")
 
 
 def get_informatieobjecttypes():
-    return get_all_from_ztcs('informatieobjecttype')
+    return get_all_from_ztcs("informatieobjecttype")
 
 
 def get_besluittypes():
-    return get_all_from_ztcs('besluittype')
+    return get_all_from_ztcs("besluittype")
 
 
 def _get_security_name(schema):
-    security_schemes = schema['components']['securitySchemes']
+    security_schemes = schema["components"]["securitySchemes"]
     for name, scheme in security_schemes.items():
-        if scheme.get('bearerFormat') == 'JWT':
+        if scheme.get("bearerFormat") == "JWT":
             return name
 
     return None
@@ -79,8 +86,8 @@ def _get_security_name(schema):
 def clean_scopes(scopes: List[str]) -> List[str]:
     result = []
     for scope in scopes:
-        if '|' in scope:
-            bits = [bit for bit in scope.strip('(').strip(')').split(' | ')]
+        if "|" in scope:
+            bits = [bit for bit in scope.strip("(").strip(")").split(" | ")]
             result += clean_scopes(bits)
         else:
             result.append(scope)
@@ -93,7 +100,9 @@ def _fetch_scopes(service: Service) -> Optional[set]:
     try:
         schema = client.schema
     except requests.ConnectionError:
-        logger.warning("Service %r appears to be down, skipping...", service, exc_info=1)
+        logger.warning(
+            "Service %r appears to be down, skipping...", service, exc_info=1
+        )
         return
     except requests.HTTPError:
         logger.exception("Could not retrieve schema for service %s", service)
@@ -103,15 +112,15 @@ def _fetch_scopes(service: Service) -> Optional[set]:
     if security_name is None:
         return
 
-    for path_options in client.schema['paths'].values():
+    for path_options in client.schema["paths"].values():
         for method in path_options.values():
             if not isinstance(method, dict):  # parameters list
                 continue
 
-            if 'security' not in method:
+            if "security" not in method:
                 continue
 
-            for security in method['security']:
+            for security in method["security"]:
                 _scopes = security.get(security_name)
                 if _scopes is None:
                     continue
@@ -121,7 +130,7 @@ def _fetch_scopes(service: Service) -> Optional[set]:
     return scopes
 
 
-@cache('scopes', duration=60 * 60)
+@cache("scopes", duration=60 * 60)
 def get_scopes() -> List[str]:
     """
     Check the API schemas of all services and compile a list of all the scopes.
@@ -149,13 +158,16 @@ def get_applicatie(client_id: str) -> Optional[dict]:
         return []
 
     client = config.primary_ac.build_client()
-    applicaties = client.list('applicatie', query_params={
-        'clientIds': client_id
-    })['results']
+    applicaties = client.list("applicatie", query_params={"clientIds": client_id})[
+        "results"
+    ]
 
     if len(applicaties) > 1:
-        logger.warning("Applications should be unique by client_id! Found "
-                       "multiple for client ID '%s'", client_id)
+        logger.warning(
+            "Applications should be unique by client_id! Found "
+            "multiple for client ID '%s'",
+            client_id,
+        )
         return None
 
     if not applicaties:
@@ -166,26 +178,26 @@ def get_applicatie(client_id: str) -> Optional[dict]:
 
 def get_authorizations(client_id: Optional[str] = None) -> Dict[str, Any]:
     if not client_id:
-        return {'autorisaties': []}
+        return {"autorisaties": []}
 
     applicatie = get_applicatie(client_id)
     if applicatie is None:
-        return {'autorisaties': []}
+        return {"autorisaties": []}
 
     url_to_repr = {}
     collections = (
-        (get_zaaktypes(), 'zaaktypes'),
-        (get_informatieobjecttypes(), 'informatieobjecttypes'),
-        (get_besluittypes(), 'besluittypes'),
+        (get_zaaktypes(), "zaaktypes"),
+        (get_informatieobjecttypes(), "informatieobjecttypes"),
+        (get_besluittypes(), "besluittypes"),
     )
     for container, key in collections:
         for item in container:
             for x in item[key]:
-                url_to_repr[x['url']] = x['omschrijving']
+                url_to_repr[x["url"]] = x["omschrijving"]
 
     # replace URLs with their representations
-    for autorisatie in applicatie['autorisaties']:
-        for key in ('zaaktype', 'informatieobjecttype', 'besluittype'):
+    for autorisatie in applicatie["autorisaties"]:
+        for key in ("zaaktype", "informatieobjecttype", "besluittype"):
             url = autorisatie.get(key)
             if url and url in url_to_repr:
                 autorisatie[key] = f"{url_to_repr[url]} ({url})"
@@ -203,27 +215,27 @@ def add_authorization(client_id: str, authorization: dict) -> None:
         body = applicatie
     else:
         # need to create it
-        body = {
-            'clientIds': [client_id],
-            'label': client_id,
-            'autorisaties': []
-        }
+        body = {"clientIds": [client_id], "label": client_id, "autorisaties": []}
 
     # add the new autorisatie
-    body['autorisaties'].append({
-        'component': authorization['component'],
-        'scopes': authorization['scopes'],
-        'zaaktype': authorization['zaaktype'],
-        'informatieobjecttype': authorization['informatieobjecttype'],
-        'besluittype': authorization['besluittype'],
-        'maxVertrouwelijkheidaanduiding': authorization['max_vertrouwelijkheidaanduiding'],
-    })
+    body["autorisaties"].append(
+        {
+            "component": authorization["component"],
+            "scopes": authorization["scopes"],
+            "zaaktype": authorization["zaaktype"],
+            "informatieobjecttype": authorization["informatieobjecttype"],
+            "besluittype": authorization["besluittype"],
+            "maxVertrouwelijkheidaanduiding": authorization[
+                "max_vertrouwelijkheidaanduiding"
+            ],
+        }
+    )
 
     if applicatie is not None:
-        url = body.pop('url')
-        client.update('applicatie', data=body, url=url)
+        url = body.pop("url")
+        client.update("applicatie", data=body, url=url)
     else:
-        client.create('applicatie', data=body)
+        client.create("applicatie", data=body)
 
 
 def create_superuser_client(client_id: str, label: str) -> None:
@@ -242,7 +254,7 @@ def create_superuser_client(client_id: str, label: str) -> None:
         "heeftAlleAutorisaties": True,
         "autorisaties": [],
     }
-    client.create('applicatie', data=body)
+    client.create("applicatie", data=body)
 
 
 def make_superuser(client_id: str) -> None:
@@ -256,8 +268,7 @@ def make_superuser(client_id: str) -> None:
     config = Configuration.get_solo()
     client = config.primary_ac.build_client()
 
-    application.update({
-        "heeftAlleAutorisaties": True,
-        "autorisaties": [],
-    })
-    client.update('applicatie', data=application, url=application["url"])
+    application.update(
+        {"heeftAlleAutorisaties": True, "autorisaties": [],}
+    )
+    client.update("applicatie", data=application, url=application["url"])

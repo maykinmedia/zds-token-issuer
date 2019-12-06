@@ -17,8 +17,10 @@ from zds_client import ClientAuth
 from .forms import ClientIDForm, CreateCredentialsForm, RegisterAuthorizationsForm
 from .models import RegistrationError, ServiceProxy as Service
 from .service import (
-    add_authorization, create_superuser_client,
-    get_authorizations, make_superuser,
+    add_authorization,
+    create_superuser_client,
+    get_authorizations,
+    make_superuser,
 )
 
 logger = logging.getLogger(__name__)
@@ -26,7 +28,9 @@ logger = logging.getLogger(__name__)
 NUM_THREADS = 10
 
 
-def _register_client(service: Service, client_id: str, secret: str, request: HttpRequest):
+def _register_client(
+    service: Service, client_id: str, secret: str, request: HttpRequest
+):
     logger.debug("Registering credentials to %s", service)
     try:
         service.register_client(client_id, secret)
@@ -51,10 +55,10 @@ class ResetView(View):
 
 
 class CreateCredentialsView(SuccessMessageMixin, FormView):
-    template_name = 'services/client.html'
+    template_name = "services/client.html"
     form_class = CreateCredentialsForm
     success_message = _("Your credentials have been registered with the services")
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy("index")
 
     def get_services(self):
         return Service.objects.iterator()
@@ -64,65 +68,65 @@ class CreateCredentialsView(SuccessMessageMixin, FormView):
         superuser = form.cleaned_data["superuser"]
 
         self.request.session["superuser"] = superuser
-        self.request.session['client_id'] = client_id
-        self.request.session['secret'] = secret
+        self.request.session["client_id"] = client_id
+        self.request.session["secret"] = secret
 
         # register with services
         with ThreadPoolExecutor(max_workers=NUM_THREADS) as pool:
             for service in self.get_services():
-                pool.submit(
-                    _register_client,
-                    service, client_id,
-                    secret, self.request
-                )
+                pool.submit(_register_client, service, client_id, secret, self.request)
             messages.success(self.request, _("Client ID registered with services."))
 
         # register the application
         if superuser:
             create_superuser_client(client_id, form.cleaned_data["label"])
-            messages.success(self.request, _("Application registered with superuser permissions."))
+            messages.success(
+                self.request, _("Application registered with superuser permissions.")
+            )
 
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['services'] = self.get_services()
+        context["services"] = self.get_services()
 
         # put a JWT in the session if it's not there yet
-        can_generate_creds = "client_id" in self.request.session and "secret" in self.request.session
+        can_generate_creds = (
+            "client_id" in self.request.session and "secret" in self.request.session
+        )
         if can_generate_creds and "credentials" not in self.request.session:
             auth = ClientAuth(
                 client_id=self.request.session["client_id"],
                 secret=self.request.session["secret"],
             )
-            self.request.session['credentials'] = auth.credentials()
+            self.request.session["credentials"] = auth.credentials()
 
         return context
 
 
 class SetClientIDMixin:
-
     def _set_client_id(self, form) -> str:
-        client_id = form.cleaned_data['client_id']
-        if 'client_id' not in self.request.session or self.request.session['client_id'] != client_id:
-            self.request.session['client_id'] = client_id
+        client_id = form.cleaned_data["client_id"]
+        if (
+            "client_id" not in self.request.session
+            or self.request.session["client_id"] != client_id
+        ):
+            self.request.session["client_id"] = client_id
         return client_id
 
     def _get_client_id(self) -> Optional[str]:
-        return self.request.session.get('client_id')
+        return self.request.session.get("client_id")
 
     def get_initial(self):
         initial = super().get_initial()
-        initial.update(
-            client_id=self._get_client_id() or '',
-        )
+        initial.update(client_id=self._get_client_id() or "",)
         return initial
 
 
 class ViewAuthView(SetClientIDMixin, FormView):
     form_class = ClientIDForm
     template_name = "services/view_auth.html"
-    success_url = reverse_lazy('view-auth')
+    success_url = reverse_lazy("view-auth")
 
     def form_valid(self, form):
         self._set_client_id(form)
@@ -131,14 +135,14 @@ class ViewAuthView(SetClientIDMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_id = self._get_client_id()
-        context['application'] = get_authorizations(client_id)
+        context["application"] = get_authorizations(client_id)
         return context
 
 
 class SetAuthorizationsView(SuccessMessageMixin, SetClientIDMixin, FormView):
     form_class = RegisterAuthorizationsForm
     template_name = "services/set_auth.html"
-    success_url = reverse_lazy('set-auth')
+    success_url = reverse_lazy("set-auth")
     success_message = _("The authorization has been added")
 
     def get_form_class(self):
@@ -149,7 +153,7 @@ class SetAuthorizationsView(SuccessMessageMixin, SetClientIDMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_id = self._get_client_id()
-        context['authorizations'] = get_authorizations(client_id)['autorisaties']
+        context["authorizations"] = get_authorizations(client_id)["autorisaties"]
         return context
 
     def form_valid(self, form):

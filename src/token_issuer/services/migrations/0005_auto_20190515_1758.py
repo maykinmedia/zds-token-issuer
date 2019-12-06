@@ -7,13 +7,20 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('services', '0004_auto_20190515_1755'),
+        ("services", "0004_auto_20190515_1755"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='configuration',
-            name='primary_ac',
-            field=models.ForeignKey(limit_choices_to={'api_type': 'ac'}, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='zgw_consumers.Service', verbose_name='Authorization component (AC)'),
+            model_name="configuration",
+            name="primary_ac",
+            field=models.ForeignKey(
+                limit_choices_to={"api_type": "ac"},
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="+",
+                to="zgw_consumers.Service",
+                verbose_name="Authorization component (AC)",
+            ),
         ),
     ]

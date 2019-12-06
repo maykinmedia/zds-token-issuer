@@ -24,23 +24,26 @@ SCOPE_PREFIXES = {
 
 class CreateCredentialsForm(forms.Form):
     label = forms.CharField(
-        label=_("Client label"),
-        help_text=_("Human-readable label"),
+        label=_("Client label"), help_text=_("Human-readable label"),
     )
     prefix = forms.CharField(
         label=_("Prefix"),
-        help_text=_("Makes your client ID easier recognizable! "
-                    "A random string will be appended."),
+        help_text=_(
+            "Makes your client ID easier recognizable! "
+            "A random string will be appended."
+        ),
     )
     superuser = forms.BooleanField(
         label=_("Assign superuser permissions?"),
         required=False,
-        help_text=_("Useful for prototyping and getting started quickly, but we "
-                    "advise against this for serious use cases.")
+        help_text=_(
+            "Useful for prototyping and getting started quickly, but we "
+            "advise against this for serious use cases."
+        ),
     )
 
     def save(self, *args, **kwargs) -> Tuple[str, str]:
-        prefix = self.cleaned_data['prefix']
+        prefix = self.cleaned_data["prefix"]
         random_client_id = get_random_string(length=12)
         client_id = f"{prefix}-{random_client_id}"
         secret = get_random_string(length=32)
@@ -55,64 +58,82 @@ class RegisterAuthorizationsForm(ClientIDForm):
     """
     A form to register the authorizations in the AC.
     """
+
     component = forms.ChoiceField(
         label=_("Component"),
         choices=APITypes.choices,
-        help_text=_("The type of component to apply permissions for. "
-                    "A selection here shows the relevant possible scopes.")
+        help_text=_(
+            "The type of component to apply permissions for. "
+            "A selection here shows the relevant possible scopes."
+        ),
     )
     scopes = forms.MultipleChoiceField(
         label=_("Scopes"),
         required=True,
         widget=forms.CheckboxSelectMultiple,
-        help_text=_("Check the scopes that the consumer needs.")
+        help_text=_("Check the scopes that the consumer needs."),
     )
 
     # optional type limitations
     zaaktype = forms.ChoiceField(
-        label=_("Zaaktype"), required=False,
-        help_text=_("Enkel deze zaaktypen worden ontsloten")
+        label=_("Zaaktype"),
+        required=False,
+        help_text=_("Enkel deze zaaktypen worden ontsloten"),
     )
     informatieobjecttype = forms.ChoiceField(
-        label=_("Informatieobjecttype"), required=False,
-        help_text=_("Enkel deze informatieobjecttypen worden ontsloten.")
+        label=_("Informatieobjecttype"),
+        required=False,
+        help_text=_("Enkel deze informatieobjecttypen worden ontsloten."),
     )
     besluittype = forms.ChoiceField(
-        label=_("Besluittype"), required=False,
-        help_text=_("Enkel deze besluittypen worden ontsloten.")
+        label=_("Besluittype"),
+        required=False,
+        help_text=_("Enkel deze besluittypen worden ontsloten."),
     )
     max_vertrouwelijkheidaanduiding = forms.ChoiceField(
         label=_("Maximale vertrouwelijkheidaanduiding"),
-        choices=(('', '-------'),) + VertrouwelijkheidsAanduiding.choices, required=False,
-        help_text=_("Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten")
+        choices=(("", "-------"),) + VertrouwelijkheidsAanduiding.choices,
+        required=False,
+        help_text=_(
+            "Objecten tot en met deze vertrouwelijkheidaanduiding worden ontsloten"
+        ),
     )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields["client_id"].help_text = _("A 'Client ID' of the application you wish to configure")
+        self.fields["client_id"].help_text = _(
+            "A 'Client ID' of the application you wish to configure"
+        )
 
         # fetch and present the available scopes
         scopes = get_scopes()
-        self.fields['scopes'].choices = [(scope, scope) for scope in sorted(scopes)]
+        self.fields["scopes"].choices = [(scope, scope) for scope in sorted(scopes)]
 
         # fetch the available zaaktypes
         zaaktypes = get_zaaktypes()
-        self.fields['zaaktype'].choices = _get_choices(
-            zaaktypes, key='zaaktypes',
-            transform=lambda x: f"{x['omschrijving']} ({x['identificatie']})"
+        self.fields["zaaktype"].choices = _get_choices(
+            zaaktypes,
+            key="zaaktypes",
+            transform=lambda x: f"{x['omschrijving']} ({x['identificatie']})",
         )
 
         informatieobjecttypes = get_informatieobjecttypes()
-        self.fields['informatieobjecttype'].choices = _get_choices(informatieobjecttypes, key='informatieobjecttypes')
+        self.fields["informatieobjecttype"].choices = _get_choices(
+            informatieobjecttypes, key="informatieobjecttypes"
+        )
 
         besluittypes = get_besluittypes()
-        self.fields['besluittype'].choices = _get_choices(besluittypes, key='besluittypes')
+        self.fields["besluittype"].choices = _get_choices(
+            besluittypes, key="besluittypes"
+        )
 
     def clean(self):
         component = self.cleaned_data.get("component")
         scopes = self.cleaned_data.get("scopes")
-        max_vertrouwelijkheidaanduiding = self.cleaned_data.get("max_vertrouwelijkheidaanduiding")
+        max_vertrouwelijkheidaanduiding = self.cleaned_data.get(
+            "max_vertrouwelijkheidaanduiding"
+        )
 
         if not component:
             return
@@ -121,9 +142,8 @@ class RegisterAuthorizationsForm(ClientIDForm):
             return
 
         scope_prefix = SCOPE_PREFIXES.get(component)
-        component_specific_scope_used = (
-            scope_prefix is not None
-            and any(scope.startswith(scope_prefix) for scope in scopes)
+        component_specific_scope_used = scope_prefix is not None and any(
+            scope.startswith(scope_prefix) for scope in scopes
         )
 
         if (
@@ -134,9 +154,11 @@ class RegisterAuthorizationsForm(ClientIDForm):
             self.add_error(
                 "max_vertrouwelijkheidaanduiding",
                 forms.ValidationError(
-                    _("You must specify a max_vertrouwelijkheidaanduiding for this component."),
-                    code="required"
-                )
+                    _(
+                        "You must specify a max_vertrouwelijkheidaanduiding for this component."
+                    ),
+                    code="required",
+                ),
             )
 
         for _component, field in (
@@ -153,7 +175,9 @@ class RegisterAuthorizationsForm(ClientIDForm):
                 self.add_error(
                     field,
                     forms.ValidationError(
-                        _("You must specify the {field} for this component.").format(field=field),
-                        code="required"
-                    )
+                        _("You must specify the {field} for this component.").format(
+                            field=field
+                        ),
+                        code="required",
+                    ),
                 )
