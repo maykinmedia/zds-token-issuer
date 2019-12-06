@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 import requests
 from solo.models import SingletonModel
+from zds_client import ClientAuth
 from zgw_consumers.constants import APITypes
 from zgw_consumers.models import Service as _Service
 
@@ -52,10 +53,13 @@ class ServiceProxy(_Service):
         return urljoin(self.api_root, "schema/openapi.yaml")
 
     def register_client(self, client_id: str, secret: str) -> None:
+        auth = ClientAuth(client_id=self.client_id, secret=self.secret)
         endpoint = urljoin(self.api_root, "jwtsecret/")
         try:
             response = requests.post(
-                endpoint, json={"identifier": client_id, "secret": secret}
+                endpoint,
+                json={"identifier": client_id, "secret": secret},
+                headers=auth.credentials(),
             )
         except requests.ConnectionError as exc:
             raise RegistrationError() from exc
