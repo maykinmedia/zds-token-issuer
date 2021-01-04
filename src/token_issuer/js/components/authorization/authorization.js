@@ -44,6 +44,18 @@ const CONFIG = {
         fields: ['besluittype'],
         scopePrefixes: ['besluiten', 'notificaties', 'audittrails'],
     },
+    'KC': {
+        fields: [],
+        scopePrefixes: ['klanten', 'audittrails'],
+    },
+    'VRC': {
+        fields: [],
+        scopePrefixes: ['verzoeken', 'audittrails'],
+    },
+    'CMC': {
+        fields: [],
+        scopePrefixes: ['contactmomenten', 'audittrails'],
+    },
     'ORC': {
         fields: [],
         scopePrefixes: [],
