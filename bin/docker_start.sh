@@ -7,6 +7,8 @@ set -e
 export PGHOST=${DB_HOST:-db}
 export PGPORT=${DB_PORT:-5432}
 
+http_timeout=${UWSGI_HTTP_TIMEOUT:-180}
+
 until pg_isready; do
   >&2 echo "Waiting for database connection..."
   sleep 1
@@ -27,5 +29,6 @@ uwsgi \
     --static-map /media=/app/media  \
     --chdir src \
     --processes 2 \
-    --threads 2
+    --threads 2 \
+    --http-timeout=$http_timeout
     # processes & threads are needed for concurrency without nginx sitting inbetween
