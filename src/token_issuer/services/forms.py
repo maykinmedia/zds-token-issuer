@@ -19,6 +19,9 @@ SCOPE_PREFIXES = {
     APITypes.zrc: "zaken.",
     APITypes.drc: "documenten.",
     APITypes.brc: "besluiten.",
+    APITypes.kc: "klanten.",
+    APITypes.cmc: "contactmomenten.",
+    APITypes.vrc: "verzoeken.",
 }
 
 
