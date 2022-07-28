@@ -22,8 +22,8 @@ module.exports = {
     // Path to the sass (sources) directory
     sassSrcDir: sourcesRoot + 'sass/',
 
-    // Path to the sass (sources) entry point
-    sassSrc: sourcesRoot + 'sass/**/*.scss',
+    // Path to the sass entry point
+    sassEntry: sourcesRoot + 'sass/screen.scss',
 
     // Path to the (transpiled) css directory
     cssDir: staticRoot + 'css/',
@@ -34,17 +34,8 @@ module.exports = {
     // Path to the js entry point (source)
     jsEntry: sourcesRoot + 'js/index.js',
 
-    // Path to the js (sources) directory
-    jsSrcDir: sourcesRoot + 'js/',
-
-    // Path to js (sources)
-    jsSrc: sourcesRoot + 'js/**/*.js',
-
-    // Path to the js (sources) directory
-    jsSrcDir: sourcesRoot + 'js/',
-
     // Path to the (transpiled) js directory
-    jsDir: staticRoot + 'js/',
+    jsDir: staticRoot + 'bundles/',
 
     // Path to js spec (test) files
     jsSpec: sourcesRoot + 'jstests/**/*.spec.js',
@@ -54,10 +45,4 @@ module.exports = {
 
     // Path to js code coverage directory
     coverageDir: 'reports/jstests/',
-
-    // Path to HTML templates directory
-    htmlTemplatesDir: sourcesRoot + 'templates/',
-
-    // Path to HTML includes directory
-    htmlIncludesDir: sourcesRoot + 'templates/components/'
 };

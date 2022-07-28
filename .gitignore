@@ -25,8 +25,4 @@ local.py
 /log/*.log*
 /log/nginx/*.log*
 
-# Static files build by gulp
-src/token_issuer/static/css/admin/admin_overrides.css
-src/token_issuer/static/css/screen.css
-
-src/token_issuer/static/js/
+**/static/bundles/
