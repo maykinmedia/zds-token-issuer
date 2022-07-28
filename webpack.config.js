@@ -17,8 +17,10 @@ if (argv.production) {
 module.exports = {
     // Entry points locations.
     entry: {
-        [`${paths.package.name}`]: `${__dirname}/${paths.jsEntry}`,
-        [`${paths.package.name}`]: `${__dirname}/${paths.sassEntry}`,
+        [`${paths.package.name}`]: [
+            `${__dirname}/${paths.jsEntry}`,
+            `${__dirname}/${paths.sassEntry}`,
+        ],
         'admin_overrides': `${__dirname}/${paths.sassSrcDir}/admin/admin_overrides.scss`,
     },
 
