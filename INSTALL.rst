@@ -18,9 +18,9 @@ Prerequisites
 
 You need the following libraries and/or programs:
 
-* `Python`_ 3.4 or above
+* `Python`_ 3.9 or above
 * Python `Virtualenv`_ and `Pip`_
-* `PostgreSQL`_ 9.1 or above
+* `PostgreSQL`_ 10 or above
 * `Node.js`_
 * `npm`_
 
@@ -63,9 +63,8 @@ development machine.
 
    .. code-block:: bash
 
-       $ npm install -g gulp
        $ npm install
-       $ gulp sass
+       $ npm run build
 
 5. Activate your virtual environment and create the statics and database:
 
@@ -119,7 +118,7 @@ When updating an existing installation:
        $ git pull
        $ pip install -r requirements/dev.txt
        $ npm install
-       $ gulp sass
+       $ npm run build
 
 3. Update the statics and database:
 
