@@ -24,7 +24,8 @@ SCOPE_PREFIXES = {
 
 class CreateCredentialsForm(forms.Form):
     label = forms.CharField(
-        label=_("Client label"), help_text=_("Human-readable label"),
+        label=_("Client label"),
+        help_text=_("Human-readable label"),
     )
     prefix = forms.CharField(
         label=_("Prefix"),

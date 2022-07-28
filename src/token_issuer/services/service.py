@@ -269,6 +269,9 @@ def make_superuser(client_id: str) -> None:
     client = config.primary_ac.build_client()
 
     application.update(
-        {"heeftAlleAutorisaties": True, "autorisaties": [],}
+        {
+            "heeftAlleAutorisaties": True,
+            "autorisaties": [],
+        }
     )
     client.update("applicatie", data=application, url=application["url"])

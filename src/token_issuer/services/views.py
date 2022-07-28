@@ -119,7 +119,9 @@ class SetClientIDMixin:
 
     def get_initial(self):
         initial = super().get_initial()
-        initial.update(client_id=self._get_client_id() or "",)
+        initial.update(
+            client_id=self._get_client_id() or "",
+        )
         return initial
 
 

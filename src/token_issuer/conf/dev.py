@@ -22,8 +22,16 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGGING["loggers"].update(
     {
-        "token_issuer": {"handlers": ["console"], "level": "DEBUG", "propagate": True,},
-        "django": {"handlers": ["console"], "level": "DEBUG", "propagate": True,},
+        "token_issuer": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
         "django.db.backends": {
             "handlers": ["django"],
             "level": "DEBUG",
@@ -34,7 +42,11 @@ LOGGING["loggers"].update(
             "level": "WARNING",
             "propagate": False,
         },
-        "performance": {"handlers": ["console"], "level": "INFO", "propagate": True,},
+        "performance": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
+        },
     }
 )
 
