@@ -13,11 +13,11 @@ on:
 
 env:
   IMAGE_NAME: maykinmedia/zds-token-issuer
-  DJANGO_SETTINGS_MODULE: ztc.conf.ci
+  DJANGO_SETTINGS_MODULE: token_issuer.conf.ci
   SECRET_KEY: dummy
   DB_USER: postgres
   DB_PASSWORD: ''
-  DEPLOYMENT: ztc
+  DEPLOYMENT: token_issuer
 
 jobs:
   tests:
