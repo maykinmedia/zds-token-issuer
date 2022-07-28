@@ -52,10 +52,13 @@ jobs:
         run: |
           npm ci
           npm run build
-      - name: Run tests
+      - name: Run python tests
         run: |
           python src/manage.py collectstatic --noinput --link
           coverage run src/manage.py test src
+
+      - name: Run javascript tests
+        run: npm run test
 
       - name: Publish coverage report
         uses: codecov/codecov-action@v1
