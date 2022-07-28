@@ -1,30 +1,31 @@
-{
-  "name": "token_issuer",
-  "version": "1.0.0-alpha.0",
-  "description": "issuer project",
-  "main": "src/static/token_issuer/js/token_issuer.js",
-  "directories": {
-    "doc": "doc"
-  },
-  "scripts": {
-    "test": "gulp test",
-    "build": "webpack",
-    "watch": "webpack -w"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/maykinmedia/zds-token-issuer.git"
-  },
-  "author": "Maykin Media",
-  "license": "UNLICENSED",
-  "homepage": "https://maykinmedia.nl",
-  "dependencies": {
+  {
+    "name": "token_issuer",
+    "version": "1.0.0-alpha.0",
+    "description": "issuer project",
+    "main": "src/static/token_issuer/js/token_issuer.js",
+    "directories": {
+      "doc": "doc"
+    },
+    "scripts": {
+      "test": "gulp test",
+      "build": "webpack",
+      "watch": "webpack -w"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+ssh://git@github.com/maykinmedia/zds-token-issuer.git"
+    },
+    "author": "Maykin Media",
+    "license": "UNLICENSED",
+    "homepage": "https://maykinmedia.nl",
+    "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bem.js": "^1.0.10",
     "clipboard": "^2.0.4",
     "gulp-jshint": "^2.1.0",
     "jshint-stylish": "^2.2.1",
-    "normalize.css": "^4.0.0"
+    "normalize.css": "^4.0.0",
+    "microscope-sass": "latest"
   },
   "devDependencies": {
     "@babel/core": "latest",
