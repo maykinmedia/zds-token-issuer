@@ -20,10 +20,6 @@ certifi==2022.6.15
     # via
     #   -r requirements/base.txt
     #   requests
-cffi==1.15.1
-    # via
-    #   -r requirements/base.txt
-    #   cryptography
 charset-normalizer==2.1.0
     # via
     #   -r requirements/base.txt
@@ -32,10 +28,6 @@ click==8.1.3
     # via black
 coverage==6.4.2
     # via -r requirements/test-tools.in
-cryptography==37.0.4
-    # via
-    #   -r requirements/base.txt
-    #   pyopenssl
 deprecated==1.2.13
     # via
     #   -r requirements/base.txt
@@ -46,10 +38,7 @@ django==3.2.14
     #   django-axes
     #   django-choices
     #   django-jenkins
-    #   django-privates
     #   django-redis
-    #   django-relativedelta
-    #   django-sendfile2
     #   django-sniplates
     #   django-solo
     #   zgw-consumers
@@ -65,20 +54,8 @@ django-ipware==4.0.2
     #   django-axes
 django-jenkins==0.110.0
     # via -r requirements/ci.in
-django-privates==1.3.0
-    # via
-    #   -r requirements/base.txt
-    #   zgw-consumers
 django-redis==5.2.0
     # via -r requirements/base.txt
-django-relativedelta==1.1.2
-    # via
-    #   -r requirements/base.txt
-    #   zgw-consumers
-django-sendfile2==0.6.1
-    # via
-    #   -r requirements/base.txt
-    #   django-privates
 django-sniplates==0.7.0
     # via -r requirements/base.txt
 django-solo==2.0.0
@@ -90,10 +67,7 @@ django-webtest==1.9.10
 factory-boy==3.2.1
     # via -r requirements/test-tools.in
 faker==13.15.1
-    # via
-    #   -r requirements/base.txt
-    #   factory-boy
-    #   zgw-consumers
+    # via factory-boy
 freezegun==1.2.1
     # via -r requirements/test-tools.in
 gemma-zds-client==1.0.1
@@ -118,26 +92,16 @@ platformdirs==2.5.2
     # via black
 psycopg2==2.9.3
     # via -r requirements/base.txt
-pycparser==2.21
-    # via
-    #   -r requirements/base.txt
-    #   cffi
 pyjwt==2.4.0
     # via
     #   -r requirements/base.txt
     #   gemma-zds-client
-pyopenssl==22.0.0
-    # via
-    #   -r requirements/base.txt
-    #   zgw-consumers
 pyparsing==3.0.9
     # via
     #   -r requirements/base.txt
     #   packaging
 python-dateutil==2.8.2
     # via
-    #   -r requirements/base.txt
-    #   django-relativedelta
     #   faker
     #   freezegun
 python-decouple==3.6
@@ -163,12 +127,8 @@ requests==2.28.1
     #   -r requirements/base.txt
     #   gemma-zds-client
     #   requests-mock
-    #   zgw-consumers
 requests-mock==1.9.3
-    # via
-    #   -r requirements/base.txt
-    #   -r requirements/test-tools.in
-    #   zgw-consumers
+    # via -r requirements/test-tools.in
 six==1.16.0
     # via
     #   -r requirements/base.txt
@@ -201,7 +161,7 @@ wrapt==1.14.1
     # via
     #   -r requirements/base.txt
     #   deprecated
-zgw-consumers==0.19.0
+zgw-consumers==0.4.1
     # via -r requirements/base.txt
 
 # The following packages are considered to be unsafe in a requirements file:
