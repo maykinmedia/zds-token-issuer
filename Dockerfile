@@ -33,9 +33,13 @@ WORKDIR /app
 COPY ./*.json /app/
 RUN npm install
 
+COPY ./*.js ./.babelrc /app/
+COPY ./build /app/build/
+
 # copy (scss/js) source code
 COPY ./src/token_issuer/sass /app/src/token_issuer/sass/
 COPY ./src/token_issuer/js /app/src/token_issuer/js/
+COPY ./src/token_issuer/static/fonts /app/src/token_issuer/static/fonts/
 
 # build frontend
 RUN npm run build
