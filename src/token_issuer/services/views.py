@@ -9,7 +9,7 @@ from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.http import is_safe_url
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, View
 
 from zds_client import ClientAuth
