@@ -1,6 +1,6 @@
 {
     "name": "token_issuer",
-    "version": "1.0.0-alpha.0",
+    "version": "0.2.0-rc1",
     "description": "issuer project",
     "main": "src/static/token_issuer/js/token_issuer.js",
     "directories": {
