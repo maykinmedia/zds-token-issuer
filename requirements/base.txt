@@ -10,8 +10,12 @@ async-timeout==4.0.2
     # via redis
 certifi==2022.6.15
     # via requests
+cffi==1.15.1
+    # via cryptography
 charset-normalizer==2.1.0
     # via requests
+cryptography==37.0.4
+    # via pyopenssl
 deprecated==1.2.13
     # via redis
 django==3.2.14
@@ -19,7 +23,10 @@ django==3.2.14
     #   -r requirements/base.in
     #   django-axes
     #   django-choices
+    #   django-privates
     #   django-redis
+    #   django-relativedelta
+    #   django-sendfile2
     #   django-sniplates
     #   django-solo
     #   zgw-consumers
@@ -31,14 +38,22 @@ django-choices==1.7.2
     #   zgw-consumers
 django-ipware==4.0.2
     # via django-axes
+django-privates==1.3.0
+    # via zgw-consumers
 django-redis==5.2.0
     # via -r requirements/base.in
+django-relativedelta==1.1.2
+    # via zgw-consumers
+django-sendfile2==0.6.1
+    # via django-privates
 django-sniplates==0.7.0
     # via -r requirements/base.in
 django-solo==2.0.0
     # via
     #   -r requirements/base.in
     #   zgw-consumers
+faker==13.15.1
+    # via zgw-consumers
 gemma-zds-client==1.0.1
     # via
     #   -r requirements/base.in
@@ -49,12 +64,20 @@ packaging==21.3
     # via redis
 psycopg2==2.9.3
     # via -r requirements/base.in
+pycparser==2.21
+    # via cffi
 pyjwt==2.4.0
     # via
     #   -r requirements/base.in
     #   gemma-zds-client
+pyopenssl==22.0.0
+    # via zgw-consumers
 pyparsing==3.0.9
     # via packaging
+python-dateutil==2.8.2
+    # via
+    #   django-relativedelta
+    #   faker
 python-decouple==3.6
     # via -r requirements/base.in
 python-dotenv==0.20.0
@@ -73,15 +96,22 @@ requests==2.28.1
     # via
     #   -r requirements/base.in
     #   gemma-zds-client
+    #   requests-mock
+    #   zgw-consumers
+requests-mock==1.9.3
+    # via zgw-consumers
 six==1.16.0
-    # via django-choices
+    # via
+    #   django-choices
+    #   python-dateutil
+    #   requests-mock
 sqlparse==0.4.2
     # via django
 urllib3==1.26.11
     # via requests
 wrapt==1.14.1
     # via deprecated
-zgw-consumers==0.4.1
+zgw-consumers==0.19.0
     # via -r requirements/base.in
 
 # The following packages are considered to be unsafe in a requirements file:

@@ -6,7 +6,7 @@ psycopg2
 pyjwt
 pytz
 requests
-zgw-consumers==0.4.1
+zgw-consumers
 raven
 
 # Framework libraries
