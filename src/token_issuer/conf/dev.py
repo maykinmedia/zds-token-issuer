@@ -7,8 +7,6 @@ os.environ.setdefault(
     "SECRET_KEY", "%cgu9q!-d91jh+6+dpx#e2r14c57%ud0o0gm1uttup9rq0f8(4"
 )
 
-os.environ.setdefault("IS_HTTPS", "no")
-
 os.environ.setdefault("DB_NAME", "token_issuer")
 os.environ.setdefault("DB_USER", "token_issuer")
 os.environ.setdefault("DB_PASSWORD", "token_issuer")
@@ -49,6 +47,11 @@ LOGGING["loggers"].update(
         },
     }
 )
+
+# Disable security measures for development
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
 
 #
 # Custom settings
