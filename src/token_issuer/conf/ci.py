@@ -33,7 +33,7 @@ AXES_CACHE = "axes_cache"
 #
 # CI settings
 #
-INSTALLED_APPS += ["token_issuer.tests", "django_jenkins"]
+INSTALLED_APPS += ["django_jenkins"]
 
 PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith("token_issuer.")]
 
