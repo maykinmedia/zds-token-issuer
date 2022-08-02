@@ -25,7 +25,7 @@ const CONFIG = {
     },
     'NRC': {
         fields: [],
-        scopePrefixes: ['notificaties'],
+        scopePrefixes: ['events'],
     },
 
     'ZRC': {
