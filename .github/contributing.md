@@ -20,7 +20,7 @@ However, to prevent dissapointment, we recommend you to:
 
 **Style guides**
 
-* we use `isort` to make sure imports are consistently sorted (config in `setup.cfg`)
+* we use `isort` and `black` to make sure imports are consistently sorted (config in `setup.cfg`)
 * PEP8 applies to code formatting (config in `setup.cfg`)
 * The [Django code-style][django-coding-style] applies as well
 * the `.editorconfig` file contains configuration per file-type. Most editors
