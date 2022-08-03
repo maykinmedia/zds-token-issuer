@@ -100,20 +100,18 @@ jobs:
         env: # Or as an environment variable
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-          DEPLOY_BOT_TOKEN: ${{ secrets.DEPLOY_BOT_TOKEN }}
         run: |
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
           if [ "$BRANCH" == "master" ]; then
-          bash bin/cicd.sh latest no
+          bash bin/docker_push.sh latest
           fi
 
       - name: Publish tagged image
         env: # Or as an environment variable
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-          DEPLOY_BOT_TOKEN: ${{ secrets.DEPLOY_BOT_TOKEN }}
         run: |
           TAG=$(git name-rev --tags --name-only $(git rev-parse HEAD))
           if [ "$TAG" != "undefined" ]; then
-          bash bin/docker_push.sh $TAG yes
+          bash bin/docker_push.sh $TAG
           fi
