@@ -6,7 +6,7 @@
 # Stage 1 - Backend build environment
 # includes compilers and build tooling to create the environment
 
-FROM python:3.9-alpine AS build
+FROM python:3.9-alpine AS backend-build
 
 RUN apk --no-cache add \
     gcc \
@@ -48,13 +48,13 @@ RUN npm run build
 
 
 # Stage 3 - Prepare CI tests image
-FROM build AS jenkins
+FROM backend-build AS jenkins
 
 RUN apk --no-cache add \
     postgresql-client
 
-COPY --from=build /usr/local/lib/python3.9 /usr/local/lib/python3.9
-COPY --from=build /app/requirements /app/requirements
+COPY --from=backend-build /usr/local/lib/python3.9 /usr/local/lib/python3.9
+COPY --from=backend-build /app/requirements /app/requirements
 
 RUN pip install -r requirements/ci.txt --exists-action=s
 
