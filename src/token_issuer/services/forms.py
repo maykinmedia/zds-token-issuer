@@ -2,7 +2,7 @@ from typing import Tuple
 
 from django import forms
 from django.utils.crypto import get_random_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from zgw_consumers.constants import APITypes
 
@@ -24,7 +24,8 @@ SCOPE_PREFIXES = {
 
 class CreateCredentialsForm(forms.Form):
     label = forms.CharField(
-        label=_("Client label"), help_text=_("Human-readable label"),
+        label=_("Client label"),
+        help_text=_("Human-readable label"),
     )
     prefix = forms.CharField(
         label=_("Prefix"),

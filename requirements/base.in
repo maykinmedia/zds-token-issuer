@@ -6,17 +6,13 @@ psycopg2
 pyjwt
 pytz
 requests
-uwsgi
 zgw-consumers
+raven
 
 # Framework libraries
-Django<3.0
+Django~=3.2
 django-axes
 django-choices
 django-sniplates
 django-solo
 django-redis
-
-# WSGI servers & monitoring - production oriented
-uwsgi
-raven  # error monitoring sentry

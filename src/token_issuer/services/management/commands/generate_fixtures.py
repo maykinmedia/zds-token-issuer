@@ -55,7 +55,10 @@ class Command(BaseCommand):
         api_credential = {
             "model": "vng_api_common.jwtsecret",
             "pk": 999,
-            "fields": {"identifier": client_id, "secret": secret,},
+            "fields": {
+                "identifier": client_id,
+                "secret": secret,
+            },
         }
 
         ports = [8000, 8001, 8002, 8003, 8004, 8005]

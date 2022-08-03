@@ -1,12 +1,3 @@
-"""
-Continuous integration settings module.
-"""
-import logging
-import os
-
-os.environ.setdefault("IS_HTTPS", "no")
-os.environ.setdefault("SECRET_KEY", "dummy")
-
 from .base import *  # noqa isort:skip
 
 CACHES = {
@@ -15,12 +6,35 @@ CACHES = {
     "axes": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"},
 }
 
-LOGGING = None  # Quiet is nice
-logging.disable(logging.CRITICAL)
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = ["testserver.com"]
 
+LOGGING["loggers"].update(
+    {"django": {"handlers": ["django"], "level": "WARNING", "propagate": True}}
+)
+
+#
+# Custom settings
+#
+
+# Show active environment in admin.
 ENVIRONMENT = "CI"
 
 #
 # Django-axes
 #
-AXES_BEHIND_REVERSE_PROXY = False
+AXES_BEHIND_REVERSE_PROXY = (
+    False  # Required to allow FakeRequest and the like to work correctly.
+)
+AXES_CACHE = "axes_cache"
+
+
+#
+# CI settings
+#
+INSTALLED_APPS += ["django_jenkins"]
+
+PROJECT_APPS = [app for app in INSTALLED_APPS if app.startswith("token_issuer.")]
+
+JENKINS_TASKS = ("django_jenkins.tasks.run_pylint", "django_jenkins.tasks.run_pep8")

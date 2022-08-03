@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% spaceless %}
     <!DOCTYPE html>
     <html lang="en">
@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <link href="{% static 'css/screen.css' %}" media="screen" rel="stylesheet"/>
+        <link href="{% static 'bundles/token_issuer.css' %}" media="screen" rel="stylesheet"/>
         {% block extra_css %}{% endblock %}
         <link rel="shortcut icon" href="{% static 'ico/favicon.png' %}">
     </head>
@@ -18,18 +18,17 @@
 
     <main>
         {% include 'components/header/header.html' %}
-{#        {% include 'components/hero/hero.html' %}#}
 
         <div class="content">
-        {% block content %}
-            Override <code>{% verbatim %}{% block content %}{% endverbatim %}</code>
-            to get some actual content.
-        {% endblock %}
+            {% block content %}
+                Override <code>{% verbatim %}{% block content %}{% endverbatim %}</code>
+                to get some actual content.
+            {% endblock %}
         </div>
     </main>
 
 
-    <script src="{% static 'js/token_issuer.js' %}"></script>
+    <script src="{% static 'bundles/token_issuer.js' %}"></script>
     </body>
     </html>
 {% endspaceless %}

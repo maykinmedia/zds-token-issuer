@@ -12,7 +12,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="configuration", name="ztcs",),
+        migrations.RemoveField(
+            model_name="configuration",
+            name="ztcs",
+        ),
         migrations.AddField(
             model_name="configuration",
             name="primary_ac",

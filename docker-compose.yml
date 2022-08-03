@@ -1,24 +1,16 @@
 # Inspired by https://docs.docker.com/compose/django/
-version: '3'
+version: '3.4'
 
 services:
   db:
-    # NOTE: No persistance storage configured.
-    # See: https://hub.docker.com/_/postgres/
-    image: postgres:10
-
+    image: postgres
   cache:
     image: redis:latest
-
   web:
-    build: .
+    image: maykinmedia/zds-token-issuer
     environment:
       - DJANGO_SETTINGS_MODULE=token_issuer.conf.docker
-      - SECRET_KEY=${SECRET_KEY:-#*8=vm+v=4w_z4pev+v8v$^v96#g1oo^siqg!i#s*9qb#e2b_n}
-      - ALLOWED_HOSTS=*
-      - IS_HTTPS=no
-      - CACHE_DEFAULT=cache:6379/0
-      - CACHE_AXES=cache:6379/0
+      - SECRET_KEY=${SECRET_KEY}
     ports:
       - 8000:8000
     depends_on:

@@ -23,7 +23,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "Service configuration",},
+            options={
+                "verbose_name": "Service configuration",
+            },
         ),
         migrations.AddField(
             model_name="service",

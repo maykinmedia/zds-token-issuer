@@ -1,25 +1,12 @@
-var path = require('path');
 var paths = require('./build/paths');
 var webpackConfig = require('./webpack.config.js');
-
-
-// Add istanbul-instrumenter to webpack configuration
-webpackConfig.module.loaders.push({
-    test: /\.js$/,
-    include: __dirname + '/' + paths.jsSrcDir,
-    loader: 'istanbul-instrumenter-loader',
-    enforce: 'post',
-
-    options: {
-        esModules: true
-    }
-});
 
 
 // The preprocessor config
 var preprocessors = {};
 preprocessors[paths.jsSpecEntry] = [
-    'webpack'
+    'webpack',
+    'coverage',
 ]
 
 
@@ -27,9 +14,17 @@ preprocessors[paths.jsSpecEntry] = [
 var configuration = function(config) {
     config.set({
         frameworks: [
-            'jasmine-jquery',
-            'jasmine-ajax',
             'jasmine'
+        ],
+
+        plugins: [
+            'karma-webpack',
+            'karma-jasmine',
+            'karma-coverage',
+            'karma-spec-reporter',
+            'karma-junit-reporter',
+            'karma-chrome-launcher',
+            'karma-firefox-launcher',
         ],
 
         files: [
@@ -44,21 +39,25 @@ var configuration = function(config) {
             noInfo: true
         },
 
-        reporters: ['spec', 'coverage-istanbul', 'junit'],
+        reporters: ['spec', 'coverage', 'junit'],
 
-        browsers: ['Chromium', 'Firefox', 'PhantomJS'],
+        browsers: ['ChromiumHeadless', 'FirefoxHeadless'],
 
-        coverageIstanbulReporter: {
-            reports: ['clover', 'text-summary'],
+        coverageReporter: {
+            reporters: [
+                { type: 'text-summary' },
+                { type: 'clover' },
+            ],
             dir: paths.coverageDir,
-            fixWebpackSourcePaths: true,
         },
 
         junitReporter: {
             outputDir: paths.coverageDir,
             outputFile: 'test-results.xml',
             useBrowserName: false,
-        }
+        },
+
+        singleRun: true
     });
 };
 
