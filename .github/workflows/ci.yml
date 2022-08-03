@@ -115,5 +115,5 @@ jobs:
         run: |
           TAG=$(git name-rev --tags --name-only $(git rev-parse HEAD))
           if [ "$TAG" != "undefined" ]; then
-          bash bin/cicd.sh $TAG yes
+          bash bin/docker_push.sh $TAG yes
           fi
